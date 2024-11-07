@@ -1,11 +1,11 @@
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from 'axios';
-import React, { useState } from 'react'
-import { baseurl } from '../utils/Url';
+import axios from "axios";
+import React, { useState } from "react"
+import { baseurl } from "../utils/Url";
 import eyeo from "../assets/img/eye.svg"
 import eyec from "../assets/img/crossed-eye.svg"
-import Image from 'next/image';
+import Image from "next/image";
 
 export default function LoginSection({ onToggleFlip }) {
     const [username, setUsername] = useState("");
@@ -40,7 +40,7 @@ export default function LoginSection({ onToggleFlip }) {
                 <label htmlFor="username">
                     <input
                         type="text"
-                        name='username'
+                        name="username"
                         placeholder="Username"
                         className="form__input w-full"
                         value={username}
@@ -50,8 +50,8 @@ export default function LoginSection({ onToggleFlip }) {
                 <label htmlFor="password">
                     <input
                         type={open ? "text" : "password"}
-                        id='password'
-                        name='password'
+                        id="password"
+                        name="password"
                         placeholder="Your Password"
                         className="form__input w-full"
                         value={password}
@@ -62,13 +62,13 @@ export default function LoginSection({ onToggleFlip }) {
                         alt="eye"
                         height={20}
                         onClick={togglePass}
-                        className='mr-4 cursor-pointer'
+                        className="mr-4 cursor-pointer"
                     />
                 </label>
                 <div className="form__btn">
                     <button type="button" className="btn" onClick={Submit}>Login</button>
                 </div>
-                <p>Don't have an Account? <b onClick={onToggleFlip}>Sign-up</b> then!</p>
+                <p>Don&apos;t have an Account? <b onClick={onToggleFlip}>Sign-up</b> then!</p>
             </form>
         </div>
     )
