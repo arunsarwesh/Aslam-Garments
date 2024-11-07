@@ -26,6 +26,20 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 SECRET_KEY = "django-insecure-oy9$0n!=w57$t3$^7$_&q33xjuyy*_e^3__#oj%&8z@yj6yhvv"
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
+'''
+DEBUG = True
+
+ALLOWED_HOSTS = ["*"]
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CORS_ORIGIN_ALLOW_ALL = True
+APPEND_SLASH = True
+SECURE_SSL_REDIRECT = False
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+'''
+
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
