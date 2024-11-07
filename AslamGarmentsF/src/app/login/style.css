@@ -1,0 +1,104 @@
+/* Container for the flip card */
+label {
+    all: unset;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    background-color: transparent;
+    align-items: center;
+    /* background-color: var(--first-color); */
+    border-radius: 0.25rem;
+    border: 1px solid var(--border-color-alt);
+}
+
+label .form__input {
+    border: none;
+}
+
+.login-register__container {
+    position: relative;
+    perspective: 1000px;
+    /* Give a 3D perspective */
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 10%;
+    overflow-y: auto;
+}
+
+.flip-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.flip-card-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+
+.flip-card-front {
+    background: #fff;
+    padding: 20px;
+}
+
+.flip-card-back {
+    background: #fff;
+    transform: rotateY(180deg);
+    padding: 20px;
+}
+
+/* Flip effect when the container is flipped */
+.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Optional: Styling for the login/signup button and links */
+b {
+    cursor: pointer;
+    color: var(--first-color);
+    text-decoration: none;
+}
+
+b:hover {
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 576px) {
+    .login-register__container {
+        padding-inline: 1%;
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+        padding: 10px;
+    }
+
+    .flip-card-front h2,
+    .flip-card-back h2 {
+        font-size: 1.5rem;
+    }
+
+    .flip-card-front p,
+    .flip-card-back p {
+        font-size: .9rem;
+    }
+
+
+}
+
+img {
+    display: inline;
+}

@@ -13,25 +13,25 @@
   /* Lighter background for a fresher look */
   --foreground: #2c3e50;
   /* Darker text for improved contrast */
-  --first-color: hsl(210, 100%, 50%);
+  --first-color: #0080ff;
   /* Brighter Dark Blue */
-  --first-color-alt: hsl(210, 100%, 80%);
+  --first-color-alt: #99ccff;
   /* Softer Light Blue */
-  --second-color: hsl(300, 80%, 60%);
+  --second-color: #eb47eb;
   /* Richer Bright Purple */
-  --title-color: hsl(0, 0%, 15%);
+  --title-color: #262626;
   /* Deep title color for emphasis */
-  --text-color: hsl(0, 0%, 25%);
+  --text-color: #404040;
   /* Dark Grey for regular text */
-  --text-color-light: hsl(0, 0%, 45%);
+  --text-color-light: #737373;
   /* Medium Grey for lighter text */
-  --body-color: hsl(0, 0%, 98%);
+  --body-color: #fafafa;
   /* Very light Grey for body */
-  --container-color: hsl(0, 0%, 95%);
+  --container-color: #f2f2f2;
   /* Light Grey for containers */
-  --border-color: hsl(210, 40%, 85%);
+  --border-color: #c9d9e8;
   /* Light Grey for borders */
-  --border-color-alt: hsl(210, 30%, 90%);
+  --border-color-alt: #dee6ed;
   /* Slightly Lighter Grey for alt borders */
 
   /*========== Font and typography ==========*/
@@ -1733,7 +1733,7 @@ tr:hover {
 }
 
 .login,
-.register {
+.register  {
   border: 1px solid var(--border-color-alt);
   padding: 2rem;
   border-radius: 0.5rem;
@@ -1955,12 +1955,12 @@ tr:hover {
     top: 12%;
   }
 
-  .swiper-button-next,
+  /* .swiper-button-next,
   .swiper-button-prev {
     top: -28px;
     width: 26px;
     height: 26px;
-  }
+  } */
 
   .swiper-button-prev {
     right: 36px;
@@ -2196,6 +2196,10 @@ tr:hover {
   .header__search {
     max-width: 300px;
   }
+  .swiper-button-next,
+  .swiper-button-prev {
+    top: 5%;
+  }
 }
 
 @media screen and (max-width: 350px) {
@@ -2224,7 +2228,7 @@ tr:hover {
 
   .swiper-button-next,
   .swiper-button-prev {
-    display: none;
+    top: 5%;
   }
 
   .compare__table tr th,

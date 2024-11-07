@@ -24,7 +24,8 @@ export default function RootLayout({ children }) {
         />
         <link
           rel="preconnect"
-          href="https://fonts.gstatic.com" crossorigin
+          href="https://fonts.gstatic.com" 
+          crossOrigin={`true`}
         />
         <link
           rel="stylesheet"

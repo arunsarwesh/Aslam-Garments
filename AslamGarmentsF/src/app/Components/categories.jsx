@@ -57,10 +57,10 @@ export default function Categories() {
         </div>
 
       </Swiper>
-      <div className="swiper-button-prev" data-aos="fade-left">
+      <div className="swiper-button-prev mr-3" data-aos="fade-left">
         <i className="fi fi-rs-angle-left"></i>
       </div>
-      <div className="swiper-button-next" data-aos="fade-right">
+      <div className="swiper-button-next mr-3" data-aos="fade-right">
         <i className="fi fi-rs-angle-right"></i>
       </div>
     </section>

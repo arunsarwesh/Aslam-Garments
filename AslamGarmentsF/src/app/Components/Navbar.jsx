@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import logo from "../assets/img/logo.png";
 import heart from "../assets/img/icon-heart.svg";
@@ -9,9 +9,26 @@ import profile from "../assets/img/user.svg";
 import search from "../assets/img/search.png";
 import burger from "../assets/img/menu-burger.svg";
 import Link from "next/link";
+import axios from "axios";
+import { baseurl } from "../utils/Url";
 
-const Navbar = ({page}) => {
+const Navbar = ({ page }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [user, setUser] = useState(null);
+
+    // useEffect(() => {
+
+    //     axios.get(`${baseurl}/home/`, {
+    //         headers: {
+    //             Authorization: `Token ${localStorage.getItem("token")}`,
+    //         }
+    //     }).then((res) => {
+    //         setUser(res.data);
+    //     }).catch((err) => {
+    //         console.log(err);
+    //     })
+    // }, []);
+
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -19,7 +36,7 @@ const Navbar = ({page}) => {
 
     // Define your navigation items here
     const navItems = [
-        { href: "/", label: "Home"},
+        { href: "/", label: "Home" },
         { href: "/shop", label: "Shop" },
         { href: "/profile", label: "My Account" },
         { href: "/shop/compare", label: "Compare" },
@@ -37,7 +54,7 @@ const Navbar = ({page}) => {
                     <p className="header__alert-news">
                         Super Values Deals - Save more coupons
                     </p>
-                    <Link href="login-register.html" className="header__top-action">
+                    <Link href="/login" className="header__top-action">
                         Log In / Sign Up
                     </Link>
                 </div>
@@ -46,7 +63,7 @@ const Navbar = ({page}) => {
             <nav className="nav container ">
                 <Link href="/" className="nav__logo">
                     <Image
-                    data-aos="fade-right"
+                        data-aos="fade-right"
                         className="nav__logo-img"
                         src={logo}
                         alt="website logo"
@@ -55,7 +72,7 @@ const Navbar = ({page}) => {
                 <div className={`nav__menu ${isMenuOpen ? "show-menu" : ""}`} id="nav-menu">
                     <div className="nav__menu-top">
                         <Link href="/" className="nav__menu-logo">
-                            <Image src={logo} alt=""/>
+                            <Image src={logo} alt="" />
                         </Link>
                         <div className="nav__close" onClick={toggleMenu}>
                             <i className="fi fi-rs-cross-small"></i>
@@ -63,8 +80,8 @@ const Navbar = ({page}) => {
                     </div>
                     <ul className="nav__list">
                         {navItems.map((item, index) => (
-                            <li className="nav__item" key={index} data-aos="zoom-in" data-aos-delay={(index*50)}>
-                                <Link href={item.href} className={`nav__link ${page===item.label ? "active-link" : ""}`} >
+                            <li className="nav__item" key={index} data-aos="zoom-in" data-aos-delay={(index * 50)}>
+                                <Link href={item.href} className={`nav__link ${page === item.label ? "active-link" : ""}`} >
                                     {item.label}
                                 </Link>
                             </li>
@@ -84,7 +101,7 @@ const Navbar = ({page}) => {
                 <div className="header__user-actions">
                     <Link href="/shop/wishlist" className="header__action-btn" title="Wishlist" data-aos="zoom-in-down" data-aos-delay="50">
                         <Image src={heart} alt="" />
-                        <span className="count">3</span>
+                        {/* <span className="count">3</span> */}
                     </Link>
                     <Link href="/shop/cart" className="header__action-btn" title="Login" data-aos="zoom-in-down" data-aos-delay="100">
                         <Image src={profile} alt="" />
@@ -92,7 +109,7 @@ const Navbar = ({page}) => {
                     </Link>
 
                     <div className="header__action-btn nav__toggle" id="nav-toggle" onClick={toggleMenu} data-aos="zoom-in-down" data-aos-delay="150">
-                        <Image src={burger} alt=""/>
+                        <Image src={burger} alt="" />
                     </div>
                 </div>
             </nav>

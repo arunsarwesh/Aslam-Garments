@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'aos/dist/aos.css'; // Import AOS CSS
 import AOS from 'aos';
 import Categories from "./Components/categories";
