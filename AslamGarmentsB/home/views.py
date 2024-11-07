@@ -64,9 +64,17 @@ class CustomAuthToken(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
-        username = request.data.get("username")
-        password = request.data.get("password")
-
+        try:
+            username = request.data.get("username")
+            password = request.data.get("password")
+            if username is None or password is None:
+                raise Exception
+        except:
+            return Response(
+                {"error": "Please Provide Username and Password"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
         user = authenticate(request, username=username, password=password)
 
         if user is not None:

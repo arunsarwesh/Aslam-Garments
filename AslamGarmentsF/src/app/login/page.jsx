@@ -23,7 +23,8 @@ export default function LoginSignup() {
 
             <main className="main">
                 <section className="breadcrumb">
-                    <ul className="breadcrumb__list flex container">
+                    <ul className="breadcrumb__l
+                    ist flex container">
                         <li><Link href="/" className="breadcrumb__link">Home</Link></li>
                         <li><span className="breadcrumb__link"></span>  〉</li>
                         <li><Link href={"/shop"} className="breadcrumb__link">Login</Link></li>
