@@ -62,13 +62,13 @@ export default function LoginSection({ onToggleFlip }) {
                         alt="eye"
                         height={20}
                         onClick={togglePass}
-                        className="mr-4 cursor-pointer"
+                        className="mx-4 cursor-pointer"
                     />
                 </label>
                 <div className="form__btn">
                     <button type="button" className="btn" onClick={Submit}>Login</button>
                 </div>
-                <p>Don&apos;t have an Account? <b onClick={onToggleFlip}>Sign-up</b> then!</p>
+                <p>Don&#39;t have an Account? <b onClick={onToggleFlip}>Sign-up</b> then!</p>
             </form>
         </div>
     )
