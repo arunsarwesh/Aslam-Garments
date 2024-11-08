@@ -59,9 +59,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Product
-        # fields = "__all__"
-        exclude = ["created_at"]
-
+        fields = "__all__"
 
 class ProductVariantSerializer(serializers.ModelSerializer):
     product = ProductSerializer(many=True, read_only=True)
@@ -135,3 +133,9 @@ class BulkProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.BulkProducts
         fields = ["id", "name", "discription", "marketPrice", "wholeSellPrice", "bulk_items","img"]
+
+class HomeProductSerial(serializers.ModelSerializer):
+    images = ImageSerializer(many=True, read_only=True)
+    class Meta:
+        model = models.Product
+        fields = ["id", "name", "sellingPrice","marketPrice", "images","rating","buy_count"]

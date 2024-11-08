@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { baseurl } from "../utils/Url";
 
 
 export default function ShowCaseItem({item}) {
@@ -6,8 +7,10 @@ export default function ShowCaseItem({item}) {
         <div className="showcase__item">
             <a href="details.html" className="showcase__img-box">
                 <Image
-                    src={item.img}
-                    alt=""
+                    src={baseurl+"/"+item.img1}
+                    alt={item.name}
+                    width={300}
+                    height={300}
                     className="showcase__img"
                 />
             </a>

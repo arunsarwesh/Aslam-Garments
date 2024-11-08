@@ -122,16 +122,14 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     discription = models.TextField(null=True, blank=True)
     stock = models.IntegerField()
-    product_color = models.ForeignKey(
-        "home.Color", on_delete=models.CASCADE, null=True, blank=True
-    )
+    product_color = models.ForeignKey("home.Color", on_delete=models.CASCADE, null=True, blank=True)
     marketPrice = models.FloatField()
     sellingPrice = models.FloatField()
     images = models.ManyToManyField(image, blank=True)
-    product_size = models.ForeignKey(
-        "home.Size", on_delete=models.CASCADE, null=True, blank=True
-    )
+    product_size = models.ForeignKey("home.Size", on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    buy_count = models.IntegerField(default=0)
+    rating = models.FloatField(default=0, max_length=5)
 
     def __str__(self):
         colors = self.color_set.all().values_list("color", flat=True)

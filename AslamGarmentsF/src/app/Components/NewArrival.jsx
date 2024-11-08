@@ -1,93 +1,12 @@
 "use client"
 
-import product11 from "../assets/img/product-1-1.jpg"
-import product12 from "../assets/img/product-1-2.jpg"
-import product21 from "../assets/img/product-2-1.jpg"
-import product22 from "../assets/img/product-2-2.jpg"
-import product31 from "../assets/img/product-3-1.jpg"
-import product32 from "../assets/img/product-3-2.jpg"
-import product41 from "../assets/img/product-4-1.jpg"
-import product42 from "../assets/img/product-4-2.jpg"
-import product51 from "../assets/img/product-5-1.jpg"
-import product52 from "../assets/img/product-5-2.jpg"
-import product61 from "../assets/img/product-6-1.jpg"
-import product62 from "../assets/img/product-6-2.jpg"
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, EffectCoverflow } from 'swiper/modules';
 import ProductCard from "./ProductCard"
 import useWindowDimensions from "../utils/getDimentions"
 
 
-export default function NewArrival() {
-
-  const products = [
-    {
-      img1: product11,
-      img2: product12,
-      rating: 2,
-      oldPrice: 238.85,
-      newPrice: 245.84,
-      badge: "Hot",
-      category: "Clothing",
-      name: "Colorful Pattern Shirts",
-      type: "Featured",
-    },
-    {
-      img1: product21,
-      img2: product22,
-      rating: 3,
-      oldPrice: 238.85,
-      newPrice: 245.8,
-      badge: "Hot",
-      category: "Clothing",
-      name: "Colorful Pattern Shirts",
-      type: "Featured",
-    },
-    {
-      img1: product31,
-      img2: product32,
-      rating: 4,
-      oldPrice: 238.85,
-      newPrice: 245.84,
-      badge: "Hot",
-      category: "Clothing",
-      name: "Colorful Pattern Shirts",
-      type: "Featured",
-    },
-    {
-      img1: product41,
-      img2: product42,
-      rating: 5,
-      oldPrice: 238.85,
-      newPrice: 245.84,
-      badge: "Hot",
-      category: "Clothing",
-      name: "Colorful Pattern Shirts",
-      type: "Popular",
-    },
-    {
-      img1: product51,
-      img2: product52,
-      rating: 5,
-      oldPrice: 238.85,
-      newPrice: 245.84,
-      badge: "-30%",
-      category: "Clothing",
-      name: "Colorful Pattern Shirts",
-      type: "Popular",
-    },
-    {
-      img1: product61,
-      img2: product62,
-      rating: 5,
-      oldPrice: 238.85,
-      newPrice: 245.84,
-      badge: "-22%",
-      category: "Clothing",
-      name: "Colorful Pattern Shirts",
-      type: "Newly Added",
-    },
-  ]
+export default function NewArrival({products}) {
 
   const { width, height } = useWindowDimensions();
 

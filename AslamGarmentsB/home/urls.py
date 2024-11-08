@@ -1,8 +1,6 @@
 from django.urls import path
 from . import views
 from rest_framework.authtoken.views import obtain_auth_token
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns = [
     path("login/", views.CustomAuthToken.as_view(), name="login"),
@@ -25,6 +23,3 @@ urlpatterns = [
     path("getWholeSaleProducts/",views.getWholeSaleProducts,name="Get WholeSale Products",),
     path("home/", views.Home, name="Home"),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

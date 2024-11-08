@@ -668,8 +668,8 @@ tr:hover {
   height: 40px;
   line-height: 42px;
   text-align: center;
-  background-color: var(--first-color-alt);
-  border: 1px solid var(--border-color);
+  /* background-color: var(--first-color-alt); */
+  /* border: .1px solid var(--border-color); */
   color: var(--text-color);
   font-size: var(--small-font-size);
   border-radius: 50%;
@@ -690,17 +690,11 @@ tr:hover {
   -o-transform: translateX(-50%);
 }
 
-.action__btn::before {
-  content: "";
-  top: -2px;
-  border: 0.5rem solid transparent;
-  border-top-color: var(--first-color);
-}
-
 .action__btn::after {
   content: attr(aria-label);
   bottom: 100%;
-  background-color: var(--first-color);
+  /* background-color: var(--first-color); */
+  background-color: inherit;
   color: var(--body-color);
   font-size: var(--tiny-font-size);
   white-space: nowrap;
@@ -711,6 +705,7 @@ tr:hover {
   -moz-border-radius: 0.25rem;
   -ms-border-radius: 0.25rem;
   -o-border-radius: 0.25rem;
+
 }
 
 .product__badge {

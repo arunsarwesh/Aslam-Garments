@@ -1,3 +1,4 @@
+import random
 from . import models, serializers, filters
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
@@ -417,4 +418,55 @@ def getWholeSaleProducts(request):
 def Home(request):
     cont = {}
     cont["login"] = request.user.username if request.user.is_authenticated else None
+    
+    # Categories data
+    categories = models.Category.objects.all()
+    serializer = serializers.CategorySerializer(categories, many=True)
+    cont["categories"] = serializer.data
+    
+    def get_random_products(queryset, num_items):
+        queryset_list = list(queryset)
+        random.shuffle(queryset_list)
+        return queryset_list[:num_items]
+
+    # Get products for each category
+    newly_added_products = get_random_products(models.Product.objects.order_by('-created_at')[:6],3)
+    popular_products = get_random_products(models.Product.objects.order_by('buy_count')[:6],3)
+    featured_products = get_random_products(models.Product.objects.order_by('-sellingPrice')[:6],3)
+    newly_added_productss = get_random_products(models.Product.objects.order_by('-created_at')[:6],6)
+
+    # Helper function to format product data
+    def format_product(product, category_type):
+        images = product.images.all()
+        # Calculate discount badge if applicable
+        discount_percentage = (1 - (float(product.sellingPrice) / float(product.marketPrice))) * 100
+        badge = (
+            "Hot" if product.buy_count > 100
+            else f"-{int(discount_percentage)}%" if discount_percentage > 0 else None
+        )
+        return {
+            "img1": str(images[0].image.url) if len(images) > 0 else None,
+            "img2": str(images[1].image.url) if len(images) > 1 else None,
+            "rating": random.randint(1, 5),  # Assigning a random rating for demonstration
+            "oldPrice": product.marketPrice,
+            "newPrice": product.sellingPrice,
+            "badge": badge,
+            "category": product.categories[0].name if product.categories else "Uncategorized",
+            "name": product.name,
+            "type": category_type,
+        }
+
+    # Serialize each category separately
+    cont["newly_added"] = [format_product(p, "Newly Added") for p in newly_added_productss]
+    cont["hot_release"] = [format_product(p, "Newly Added") for p in newly_added_products]
+    cont["trendy"] = [format_product(p, "Popular") for p in popular_products]
+    cont["best_deal"] = [format_product(p, "Featured") for p in featured_products]
+
+    # Combine all products with their respective types
+    cont["products"] = (
+        [format_product(p, "Newly Added") for p in newly_added_products] +
+        [format_product(p, "Popular") for p in popular_products] +
+        [format_product(p, "Featured") for p in featured_products]
+    )
+
     return Response(cont)

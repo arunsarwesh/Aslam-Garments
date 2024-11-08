@@ -1,28 +1,12 @@
-import category1 from "../assets/img/category-1.jpg";
-import category2 from "../assets/img/category-2.jpg";
-import category3 from "../assets/img/category-3.jpg";
-import category4 from "../assets/img/category-4.jpg";
-import category5 from "../assets/img/category-5.jpg";
-import category6 from "../assets/img/category-6.jpg";
-import category7 from "../assets/img/category-7.jpg";
-import category8 from "../assets/img/category-8.jpg";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from 'swiper/modules';
 import Image from "next/image";
 import "../globals.css"
+import { baseurl } from "../utils/Url";
 
 
-export default function Categories() {
-  const categories = [
-    { src: category1, alt: "Category Image 1", name: "T-Shirt" },
-    { src: category2, alt: "Category Image 2", name: "Bags" },
-    { src: category3, alt: "Category Image 3", name: "Sandal" },
-    { src: category4, alt: "Category Image 4", name: "Scarf Cap" },
-    { src: category5, alt: "Category Image 5", name: "Shoes" },
-    { src: category6, alt: "Category Image 6", name: "Pillowcase" },
-    { src: category7, alt: "Category Image 7", name: "Jumpsuit" },
-    { src: category8, alt: "Category Image 8", name: "Hats" },
-  ];
+export default function Categories({categories}) {
   return (
     <section className="categories container section">
       <h3 className="section__title" data-aos="fade-right"><span>Popular</span> Categories</h3>
@@ -49,7 +33,8 @@ export default function Categories() {
           {categories.map((category, index) => (
             <SwiperSlide key={index} virtualIndex={index} >
               <a href="/shop" className="category__item swiper-slide" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-delay={index * 150}>
-                <Image src={category.src} alt={category.alt} className="category__img" />
+                {/* <Image src={`${baseurl}/media/?${(category.image.toString().slice(6,-1))}`} width={20} height={20} alt={category.alt} className="category__img" /> */}
+                <Image src={`${baseurl}${(category.image)}`} width={100} height={100} alt={category.name} className="category__img w-full h-48" />
                 <h3 className="category__title">{category.name}</h3>
               </a>
             </SwiperSlide>

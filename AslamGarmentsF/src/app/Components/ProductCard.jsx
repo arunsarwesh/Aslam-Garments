@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import { useEffect, useState } from "react";
+import { baseurl } from "../utils/Url";
 
 
 const badgeColors = [
@@ -28,33 +29,33 @@ export default function ProductCard({ product }) {
             <div className="product__banner">
                 <a href="/shop/product" className="product__images">
                     <Image
-                        src={product.img1}
-                        alt=""
+                        src={baseurl+"/"+product.img1}
+                        alt={product.name}
+                        width={500}
+                        height={500}
                         className="product__img default"
-                        priority={true}
+                        priority
                         data-aos="zoom-in"
                         data-aos-delay="200"
                     />
                     <Image
-                        src={product.img2}
-                        alt=""
+                        src={baseurl+"/"+product.img2}
+                        alt={product.name}
+                        width={500}
+                        height={500}
                         className="product__img hover"
                         loading="lazy"
                         priority={false}
                     />
                 </a>
                 <div className="product__actions">
-                    <a href="#" className="action__btn" aria-label="Quick View">
+                    <a href="#" className="action__btn bg-gray-200 opacity-80 hover:bg-gray-400" aria-label="Quick View">
                         <i className="fi fi-rs-eye"></i>
                     </a>
-                    <a
-                        href="#"
-                        className="action__btn"
-                        aria-label="Add to Wishlist"
-                    >
+                    <a href="#" className="action__btn bg-pink-300 opacity-80 hover:bg-pink-600" aria-label="Add to Wishlist">
                         <i className="fi fi-rs-heart"></i>
                     </a>
-                    <a href="#" className="action__btn" aria-label="Compare">
+                    <a href="#" className="action__btn bg-blue-400 opacity-80 hover:bg-blue-600" aria-label="Compare">
                         <i className="fi fi-rs-shuffle"></i>
                     </a>
                 </div>
