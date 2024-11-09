@@ -1,11 +1,12 @@
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import "./style.css";
 import axios from "axios";
-import React, { useState } from "react";
-import { baseurl } from "../utils/Url";
-import eyeo from "../assets/img/eye.svg";
-import eyec from "../assets/img/crossed-eye.svg";
 import Image from "next/image";
+import { toast } from "react-toastify";
+import { baseurl } from "../utils/Url";
+import React, { useState } from "react";
+import eyeo from "../assets/img/eye.svg";
+import "react-toastify/dist/ReactToastify.css";
+import eyec from "../assets/img/crossed-eye.svg";
 
 export default function LoginSection({ onToggleFlip }) {
     const [username, setUsername] = useState("");
@@ -21,26 +22,25 @@ export default function LoginSection({ onToggleFlip }) {
             username: username,
             password: password
         })
-        .then((res) => {
-            localStorage.setItem("token", res.data.token);
-            console.log(res);
-            toast.success("Login Successful", { autoClose: 5000, position: "top-right" });
-            if (document.referrer === window.location.href) {
-                window.location.href = "/";
-            } else {
-                window.history.back();
-            }
-        })
-        .catch((err) => {
-            console.log(err.response.data.error);
-            toast.error(err.response.data.error, { autoClose: 5000, position: "top-right" });
-        });
+            .then((res) => {
+                localStorage.setItem("token", res.data.token);
+                console.log(res);
+                toast.success("Login Successful", { autoClose: 5000, position: "top-right" });
+                if (document.referrer === window.location.href) {
+                    window.location.href = "/";
+                } else {
+                    window.history.back();
+                }
+            })
+            .catch((err) => {
+                console.log(err.response.data.error);
+                toast.error(err.response.data.error, { autoClose: 5000, position: "top-right" });
+            });
     };
 
-    // Handle key press event
     const handleKeyPress = (e) => {
         if (e.key === "Enter") {
-            e.preventDefault(); // Prevents the default form submission
+            e.preventDefault();
             Submit();
         }
     };
@@ -80,7 +80,7 @@ export default function LoginSection({ onToggleFlip }) {
                 <div className="form__btn">
                     <button type="button" className="btn" onClick={Submit}>Login</button>
                 </div>
-                <p>Don&#39;t have an Account? <b onClick={onToggleFlip}>Sign-up</b> then!</p>
+                <p>Don&#39;t have an Account? <a href="#signup" onClick={onToggleFlip}><b>Sign-up!</b></a> then!</p>
             </form>
         </div>
     );

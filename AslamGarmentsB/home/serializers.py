@@ -82,7 +82,6 @@ class CartItemSerializer(serializers.ModelSerializer):
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = models.OrderItem
         fields = ["product", "quantity", "size", "color"]

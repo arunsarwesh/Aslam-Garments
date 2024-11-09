@@ -20,6 +20,8 @@ import FootBar from "../Components/footer"
 import useWindowDimensions from "../utils/getDimentions"
 import NewsLetter from "../Components/NewsLetterSH"
 import Link from "next/link";
+import axios from "axios";
+import { baseurl } from "../utils/Url";
 
 
 export default function Shop() {
@@ -28,9 +30,21 @@ export default function Shop() {
         AOS.init({duration:500});
       }, []);
 
+      const [products, setProducts] = useState([]);
+
+      useEffect(()=>{
+        axios.get(`${baseurl}/products/`)
+        .then((res)=>{
+            console.log(res.data)
+            setProducts(res.data.products)  
+        }).catch((err)=>{
+            console.log(err)
+        })
+      },[])
+
     const {width,height} = useWindowDimensions();
 
-    const products = [
+    const product = [
         {
             img1: product11,
             img2: product12,

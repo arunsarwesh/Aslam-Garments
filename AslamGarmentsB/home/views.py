@@ -30,9 +30,9 @@ def register(request):
             return Response({"email": "Please Provide your Mail Address"})
         if serializer.is_valid():
             if User.objects.filter(email=request.data["email"]).exists():
-                return Response({"message": "Email Already Exists"})
+                return Response({"message": ["Email Already Exists"]})
             if models.Address.objects.filter(phone=request.data['phone']).exists():
-                return Response({"message": "Phone Number Already Exists"})
+                return Response({"message": ["Phone Number Already Exists"]})
             user = serializer.save()
             group = Group.objects.get(name="Customer")
             user.groups.add(group)
@@ -128,6 +128,30 @@ class ProductListView(generics.ListAPIView):
         if query:
             queryset = queryset.filter(name__icontains=query)
         return queryset
+
+    def format_product(self, product):
+        images = product.images.all()
+        discount_percentage = (1 - (float(product.sellingPrice) / float(product.marketPrice))) * 100
+        badge = (
+            "Hot" if product.buy_count > 100
+            else f"-{int(discount_percentage)}%" if discount_percentage > 0 else None
+        )
+        return {
+            "id": product.id,
+            "img1": str(images[0].image.url) if len(images) > 0 else None,
+            "img2": str(images[1].image.url) if len(images) > 1 else None,
+            "rating": random.randint(1, 5),
+            "oldPrice": product.marketPrice,
+            "newPrice": product.sellingPrice,
+            "badge": badge,
+            "category": product.categories[0].name if product.categories else "Uncategorized",
+            "name": product.name,
+        }
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        formatted_products = [self.format_product(product) for product in queryset]
+        return Response({"products": formatted_products})
 
 
 @api_view(["GET"])

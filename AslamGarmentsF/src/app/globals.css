@@ -1118,6 +1118,8 @@ tr:hover {
   font-size: var(--small-font-size);
   margin-bottom: 1rem;
   display: block;
+  border-left: 1px dotted transparent;
+  border-radius: 10px;
   transition: all 0.3s var(--transition);
   -webkit-transition: all 0.3s var(--transition);
   -moz-transition: all 0.3s var(--transition);
@@ -1127,7 +1129,9 @@ tr:hover {
 
 .footer__link:hover {
   color: var(--first-color);
-  margin-left: 0.25rem;
+  padding-left: 0.35rem;
+  /* border-left: 2px solid var(--border-color); */
+  border-left: 10px groove var(--first-color);
 }
 
 .footer__bottom {

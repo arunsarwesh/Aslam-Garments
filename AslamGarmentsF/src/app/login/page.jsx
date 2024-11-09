@@ -6,8 +6,7 @@ import NewsLetter from "@/app/Components/NewsLetterSH";
 import Link from "next/link";
 import LoginSection from "./login";
 import SignupSection from "./signup";
-import { useState } from "react";
-import "./style.css";
+import { useState,useEffect } from "react";
 
 export default function LoginSignup() {
     const [isFlip, setIsFlip] = useState(false);
@@ -15,6 +14,12 @@ export default function LoginSignup() {
     const toggleFlip = () => {
         setIsFlip(!isFlip);
     };
+
+    useEffect(() => {
+        if (window.location.hash === "#signup") {
+            setIsFlip(true);
+        }
+    }, []);
 
     return (
         <>

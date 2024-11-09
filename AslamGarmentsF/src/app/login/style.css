@@ -19,7 +19,7 @@ label .form__input {
     position: relative;
     perspective: 1000px;
     /* Give a 3D perspective */
-    height: 50vh;
+    height: 56vh;
     display: flex;
     justify-content: center;
     align-items: center;
