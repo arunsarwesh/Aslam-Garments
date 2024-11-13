@@ -5,34 +5,19 @@ import Image from "next/image";
 import logo from "../assets/img/logo.png";
 import heart from "../assets/img/icon-heart.svg";
 import profile from "../assets/img/user.svg";
-// import cart from "../assets/img/icon-cart.svg";
 import search from "../assets/img/search.png";
 import burger from "../assets/img/menu-burger.svg";
 import Link from "next/link";
-import axios from "axios";
-import { baseurl } from "../utils/Url";
 
 const Navbar = ({ page }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [user, setUser] = useState(null);
-
-    // useEffect(() => {
-
-    //     axios.get(`${baseurl}/home/`, {
-    //         headers: {
-    //             Authorization: `Token ${localStorage.getItem("token")}`,
-    //         }
-    //     }).then((res) => {
-    //         setUser(res.data);
-    //     }).catch((err) => {
-    //         console.log(err);
-    //     })
-    // }, []);
-
-
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
+    useEffect(() => {
+        setUser(localStorage.getItem("username"));
+    })
 
     // Define your navigation items here
     const navItems = [
@@ -54,9 +39,14 @@ const Navbar = ({ page }) => {
                     <p className="header__alert-news">
                         Super Values Deals - Save more coupons
                     </p>
-                    <Link href="/login" className="header__top-action">
-                        Log In / Sign Up
-                    </Link>
+                    {user ?
+                        (
+                            <p className="header__top-action">Hello, {user} !!!</p>
+                        ) : (
+                            <Link href="/login" className="header__top-action">
+                                Log In / Sign Up
+                            </Link>
+                        )}
                 </div>
             </div>
 

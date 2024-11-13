@@ -81,7 +81,7 @@ class CustomAuthToken(APIView):
         if user is not None:
             token, created = Token.objects.get_or_create(user=user)
             return Response(
-                {"token": token.key, "user_id": user.pk, "email": user.email},
+                {"token": token.key, "username": user.username, "email": user.email},
                 status=status.HTTP_200_OK,
             )
         else:
@@ -100,9 +100,8 @@ def logout(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def checkAuth(request):
-    return Response({"message": "Authenticated"})
-
+def checkAuth(request):    
+    return Response({"message": "Authenticated","username": request.user.username})
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
@@ -192,16 +191,11 @@ def makeSubscription(request):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def getProduct(request, pid):
+    cont = {}
     product = models.Product.objects.get(id=pid)
-    product_serial = serializers.ProductSerializer(product)
-    product_variant = models.ProductVariant.objects.filter(product=product)
-    variant_exists = models.ProductVariant.objects.filter(product=product).exists()
-    if not variant_exists:
-        cont = {"variant": False, "product": product_serial.data}
-        return Response(cont)
-
-    variant_serial = serializers.ProductVariantSerializer(product_variant, many=True)
-    cont = {"variant": True, "variants": variant_serial.data}
+    cont["product"] = serializers.ProductSerializer(product).data
+    product_variants = models.ProductVariant.objects.filter(product=product)
+    cont["variants"] = serializers.ProductVariantSerializer(product_variants, many=True).data
     return Response(cont)
 
 
@@ -494,3 +488,14 @@ def Home(request):
     )
 
     return Response(cont)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def addReview(req):
+    if req.method == "POST":
+        serializer = serializers.ReviewSerializer(data=req.data)
+        if serializer.is_valid():
+            # serializer.save()
+            return Response({"message": "Success"})
+        return Response(serializer.errors)

@@ -3,7 +3,7 @@ import axios from "axios";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import { baseurl } from "../utils/Url";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import eyeo from "../assets/img/eye.svg";
 import "react-toastify/dist/ReactToastify.css";
 import eyec from "../assets/img/crossed-eye.svg";
@@ -17,14 +17,33 @@ export default function LoginSection({ onToggleFlip }) {
         setOpen(!open);
     };
 
+    useEffect(()=>{
+        document.title = "Login - Renz Trending";
+        const token = localStorage.getItem("token");
+        axios.get(`${baseurl}/checkAuth/`,{
+            headers:{
+                Authorization: `Token ${token}`
+            }
+        }).then((res)=>{
+            if(res.data.message==="Authenticated"){
+                localStorage.setItem("username", res.data.username);
+                window.location.href = "/";
+            }
+        }).catch((err)=>{
+            console.log(err);
+        })
+    },[])
+
     const Submit = () => {
         axios.post(`${baseurl}/login/`, {
             username: username,
             password: password
         })
             .then((res) => {
+                console.log(res.data);
                 localStorage.setItem("token", res.data.token);
-                console.log(res);
+                localStorage.setItem("email", res.data.email);
+                localStorage.setItem("username", res.data.username);
                 toast.success("Login Successful", { autoClose: 5000, position: "top-right" });
                 if (document.referrer === window.location.href) {
                     window.location.href = "/";
@@ -33,7 +52,7 @@ export default function LoginSection({ onToggleFlip }) {
                 }
             })
             .catch((err) => {
-                console.log(err.response.data.error);
+                // console.log(err.response.data.error);
                 toast.error(err.response.data.error, { autoClose: 5000, position: "top-right" });
             });
     };
@@ -62,7 +81,6 @@ export default function LoginSection({ onToggleFlip }) {
                 <label htmlFor="password">
                     <input
                         type={open ? "text" : "password"}
-                        id="password"
                         name="password"
                         placeholder="Your Password"
                         className="form__input w-full"

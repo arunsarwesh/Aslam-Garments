@@ -1,18 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import product11 from "./assets/img/product-1-1.jpg"
-import product12 from "./assets/img/product-1-2.jpg"
-import product21 from "./assets/img/product-2-1.jpg"
-import product22 from "./assets/img/product-2-2.jpg"
-import product31 from "./assets/img/product-3-1.jpg"
-import product32 from "./assets/img/product-3-2.jpg"
-import product41 from "./assets/img/product-4-1.jpg"
-import product42 from "./assets/img/product-4-2.jpg"
-import product51 from "./assets/img/product-5-1.jpg"
-import product52 from "./assets/img/product-5-2.jpg"
-import product61 from "./assets/img/product-6-1.jpg"
-import product62 from "./assets/img/product-6-2.jpg"
 import React, { useEffect, useState } from 'react';
 import 'aos/dist/aos.css'; // Import AOS CSS
 import AOS from 'aos';
@@ -37,74 +25,6 @@ export default function Home() {
   const [trendy, setTrendy] = useState([]);
   const [bestDeal, setBestDeal] = useState([]);
   const [hotReleases, setHotReleases] = useState([]);
-  const product = [
-    {
-      img1: product11,
-      img2: product12,
-      rating: 2,
-      oldPrice: 238.85,
-      newPrice: 245.84,
-      badge: "Hot",
-      category: "Clothing",
-      name: "Colorful Pattern Shirts",
-      type: "Featured",
-    },
-    {
-      img1: product21,
-      img2: product22,
-      rating: 3,
-      oldPrice: 238.85,
-      newPrice: 245.8,
-      badge: "Hot",
-      category: "Clothing",
-      name: "Colorful Pattern Shirts",
-      type: "Featured",
-    },
-    {
-      img1: product31,
-      img2: product32,
-      rating: 4,
-      oldPrice: 238.85,
-      newPrice: 245.84,
-      badge: "Hot",
-      category: "Clothing",
-      name: "Colorful Pattern Shirts",
-      type: "Featured",
-    },
-    {
-      img1: product41,
-      img2: product42,
-      rating: 5,
-      oldPrice: 238.85,
-      newPrice: 245.84,
-      badge: "Hot",
-      category: "Clothing",
-      name: "Colorful Pattern Shirts",
-      type: "Popular",
-    },
-    {
-      img1: product51,
-      img2: product52,
-      rating: 5,
-      oldPrice: 238.85,
-      newPrice: 245.84,
-      badge: "-30%",
-      category: "Clothing",
-      name: "Colorful Pattern Shirts",
-      type: "Popular",
-    },
-    {
-      img1: product61,
-      img2: product62,
-      rating: 5,
-      oldPrice: 238.85,
-      newPrice: 245.84,
-      badge: "-22%",
-      category: "Clothing",
-      name: "Colorful Pattern Shirts",
-      type: "Newly Added",
-    },
-  ]
 
   useEffect(() => {
     document.title = "Renz Trending - Home";
@@ -112,7 +32,10 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    axios.get(`${baseurl}/home/`)
+    const token = localStorage.getItem('token');
+    const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+
+    axios.get(`${baseurl}/home/`, config)
       .then((res) => {
         res.data.categories && setCategories(res.data.categories);
         res.data.products && setProducts(res.data.products);
@@ -120,9 +43,10 @@ export default function Home() {
         res.data.trendy && setTrendy(res.data.trendy);
         res.data.best_deal && setBestDeal(res.data.best_deal);
         res.data.hot_release && setHotReleases(res.data.hot_release);
+        console.log(res.data.login);
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
       });
   }, []);
 

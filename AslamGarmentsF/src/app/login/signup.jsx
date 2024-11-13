@@ -33,12 +33,13 @@ export default function SignupSection({ onToggleFlip }) {
 
     const Submit = (e) => {
         e.preventDefault();
+
         if (!validator.isEmail(email)) {
             toast.error("Invalid Email", { autoClose: 5000, position: "top-right" });
             return;
         }
         if (!validator.isMobilePhone(phone)) {
-            toast.error("Invalid Email", { autoClose: 5000, position: "top-right" });
+            toast.error("Invalid Phone Number", { autoClose: 5000, position: "top-right" });
             return;
         }
         if (username === "" || email === "" || password === "" || confirmPassword === "") {
@@ -50,7 +51,7 @@ export default function SignupSection({ onToggleFlip }) {
             return;
         }
         if (!schema.validate(password)) {
-            schema.validate(password, { details: true }).map((error) => {
+            schema.validate(password, { details: true }).forEach((error) => {
                 toast.error(error.message, { autoClose: 8000, position: "top-right" });
             });
             return;
@@ -61,21 +62,17 @@ export default function SignupSection({ onToggleFlip }) {
             phone: phone,
             email: email
         }).then((res) => {
-            console.log(res.data);
-            if (res.data['message'] === "User Created Successfully") {
+            if (res.data.message === "User Created Successfully") {
                 toast.success("Registration Successful", { autoClose: 5000, position: "top-right" });
                 onToggleFlip();
             } else {
                 for (let m in res.data) {
-                    console.log(res.data[m]);
                     toast.error(res.data[m][0], { autoClose: 5000, position: "top-right" });
                 }
             }
         }).catch((err) => {
-            console.error(err)
-            toast.error("something");
-        })
-
+            toast.error("Something went wrong", { autoClose: 5000, position: "top-right" });
+        });
     }
 
     // Handle key press event
@@ -125,7 +122,6 @@ export default function SignupSection({ onToggleFlip }) {
                 <label htmlFor="password">
                     <input
                         type={open ? "text" : "password"}
-                        id="password"
                         name="password"
                         placeholder="Your Password"
                         className="form__input w-full"

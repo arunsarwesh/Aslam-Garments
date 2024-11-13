@@ -7,7 +7,6 @@ urlpatterns = [
     path("signup/", views.register, name="register"),
     path("logout/", views.logout, name="logout"),
     path("getCat/", views.getCategories, name="getCategories"),
-    path("checkAuth/", views.checkAuth, name="checkAuth"),
     path("products/", views.ProductListView.as_view(), name="products"),
     path("subscribe/", views.makeSubscription, name="Make Subscription"),
     path("getcolor/", views.getcolors, name="Get Colors"),
@@ -21,5 +20,8 @@ urlpatterns = [
     path("getOrder/", views.getOrder, name="Get Order"),
     path("isWholeSaleUser/", views.isWholeSaleUser, name="Check WholeSale User"),
     path("getWholeSaleProducts/",views.getWholeSaleProducts,name="Get WholeSale Products",),
+    
+    path("checkAuth/", views.checkAuth, name="checkAuth"),
     path("home/", views.Home, name="Home"),
+    path("addReview/", views.addReview, name="Add Review"),
 ]

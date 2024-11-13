@@ -22,11 +22,11 @@ import NewsLetter from "@/app/Components/NewsLetterSH";
 import ProductCard from "@/app/Components/ProductCard";
 import Link from "next/link";
 
-export default function ProductPage() {
+export default function ProductPage({params}) {
 
   const product = {
     name: "Henley Shirt",
-    brand: "adidas",
+    brand: "Addidas",
     newPrice: "$116",
     oldPrice: "$200.00",
     savePrice: "25% Off",

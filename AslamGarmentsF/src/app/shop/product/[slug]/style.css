@@ -1,0 +1,5 @@
+.rativ{
+    filter: drop-shadow(0px 0px 1px var(--first-color-alt));
+    transition: all 0.3s ease;
+    cursor: pointer;
+}

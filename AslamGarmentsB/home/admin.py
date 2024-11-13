@@ -23,7 +23,7 @@ from rest_framework.authtoken.admin import TokenAdmin
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.template.response import TemplateResponse
-from django.urls import path,reverse
+from django.urls import path, reverse
 from django.contrib.admin import AdminSite
 
 TokenAdmin.raw_id_fields = ["user"]
@@ -69,6 +69,24 @@ class SizeInline(admin.TabularInline):
 
 # Admin form for Product
 class ProductAdminForm(forms.ModelForm):
+    tags = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={"placeholder": "Enter tags separated by commas"}),
+        help_text="Enter tags separated by commas, e.g., 'tag1, tag2, tag3'",
+    )
+    fabric = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={"placeholder": "Enter fabrics used in the product"}),
+        help_text="Enter fabrics used in the product separated by commas, e.g., 'cotton, silk, wool'",
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            self.initial["tags"] = ", ".join(self.instance.tags) if isinstance(self.instance.tags, list) else ""
+            self.initial["fabric"] = ", ".join(self.instance.fabric) if isinstance(self.instance.fabric, list) else ""
+            
+
     class Meta:
         model = Product
         fields = [
@@ -79,12 +97,28 @@ class ProductAdminForm(forms.ModelForm):
             "sellingPrice",
             "product_color",
             "product_size",
+            "tags",
+            "gsm",
+            "net_weight",
+            "fabric",
+            "product_type",
+            "sleeve",
+            "fit",
+            "ideal_for",
         ]
         widgets = {
             "category": forms.CheckboxSelectMultiple,
             "color": forms.CheckboxSelectMultiple,
             "sizes": forms.CheckboxSelectMultiple,
         }
+
+    def clean_tags(self):
+        tags = self.cleaned_data["tags"]
+        return [tag.strip() for tag in tags.split(",") if tag.strip()]
+    
+    def clean_fabric(self):
+        fabric = self.cleaned_data["fabric"]
+        return [fabric.strip() for fabric in fabric.split(",") if fabric.strip()]
 
 
 @admin.register(ProductVariant)
@@ -125,9 +159,13 @@ class ProductAdmin(admin.ModelAdmin):
         "main_image_tag",
         "additional_images_tag",
         "color_code",
+        "tagsvalue",
     ]
     search_fields = ["name"]
     list_filter = ["category", "color", "product_size"]
+
+    def tagsvalue(self, obj):
+        return "| : |".join(obj.tags or [])
 
     def save_formset(self, request, form, formset, change):
         if formset.model == image:
@@ -175,7 +213,7 @@ class ProductAdmin(admin.ModelAdmin):
 # Customer admin
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ["profilePic", "user", "cart_items", "Cart_Item_Images","address"]
+    list_display = ["profilePic", "user", "cart_items", "Cart_Item_Images", "address"]
 
     def Cart_Item_Images(self, obj):
         txt = ""
@@ -186,8 +224,8 @@ class CustomerAdmin(admin.ModelAdmin):
                 else ""
             )
         return mark_safe(txt)
-    
-    def profilePic(self,obj):
+
+    def profilePic(self, obj):
         return mark_safe(f'<img src="{obj.pic.url}" width="100" height="150" />')
 
 
@@ -367,9 +405,21 @@ class MyAdminSite(AdminSite):
         custom_urls = [
             path("", self.admin_view(self.custom_index), name="index"),
             path("NewOrders/", self.admin_view(self.pending), name="NewOrders"),
-            path("NewOrders/<int:pk>/",self.admin_view(self.check_pending),name="check_pending",),
-            path("NewOrders/<int:pk>/accept/",self.admin_view(self.accept_order),name="AcceptOrder",),
-            path("NewOrders/<int:pk>/reject/",self.admin_view(self.reject_order),name="RejectOrder",),
+            path(
+                "NewOrders/<int:pk>/",
+                self.admin_view(self.check_pending),
+                name="check_pending",
+            ),
+            path(
+                "NewOrders/<int:pk>/accept/",
+                self.admin_view(self.accept_order),
+                name="AcceptOrder",
+            ),
+            path(
+                "NewOrders/<int:pk>/reject/",
+                self.admin_view(self.reject_order),
+                name="RejectOrder",
+            ),
         ]
 
         return custom_urls + urls

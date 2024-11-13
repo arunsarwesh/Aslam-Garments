@@ -2,6 +2,7 @@
 // import FootBar from "./Components/footer"
 import "./globals.css"
 import 'swiper/css';
+import 'react-toastify/dist/ReactToastify.css';
 // import "./assets/js/main.js"
 
 export const metadata = {

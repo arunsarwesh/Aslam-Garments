@@ -22,6 +22,7 @@ import NewsLetter from "../Components/NewsLetterSH"
 import Link from "next/link";
 import axios from "axios";
 import { baseurl } from "../utils/Url";
+import { ToastContainer } from "react-toastify";
 
 
 export default function Shop() {
@@ -29,6 +30,8 @@ export default function Shop() {
     useEffect(() => {
         AOS.init({duration:500});
       }, []);
+
+
 
       const [products, setProducts] = useState([]);
 
@@ -470,6 +473,7 @@ export default function Shop() {
     return (
         <>
             <Navbar page={"Shop"} />
+            <ToastContainer/>
             <main className="main">
                 <section className="breadcrumb">
                     <ul className="breadcrumb__list flex container">

@@ -56,6 +56,7 @@ class ProductSerializer(serializers.ModelSerializer):
     product_color = ColorSerializer(read_only=True)
     product_size = SizeSerializer(read_only=True)
     sizes = SizeSerializer(source="size_set", many=True, read_only=True)
+    SKU = serializers.CharField(read_only=True)
 
     class Meta:
         model = models.Product
@@ -138,3 +139,8 @@ class HomeProductSerial(serializers.ModelSerializer):
     class Meta:
         model = models.Product
         fields = ["id", "name", "sellingPrice","marketPrice", "images","rating","buy_count"]
+    
+class PostReviewSerial(serializers.ModelSerializer):
+    class Meta:
+        model = models.Review
+        fields = ["product","rating","review"]

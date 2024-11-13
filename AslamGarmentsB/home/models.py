@@ -17,12 +17,13 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
 
+
 def validate_gst(value):
-    gst_pattern = r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$'
+    gst_pattern = r"^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$"
     if not re.match(gst_pattern, value):
         raise ValidationError(
-            _('Invalid GST number. Please enter a valid GST number.'),
-            code='invalid_gst'
+            _("Invalid GST number. Please enter a valid GST number."),
+            code="invalid_gst",
         )
 
 
@@ -40,7 +41,9 @@ class Customer(models.Model):
     cart = models.ManyToManyField("home.CartItem", blank=True)
     otp = models.PositiveIntegerField(null=True)
     otpst = models.DateTimeField(default=timezone.now)
-    gstNo = models.CharField(max_length=200, null=True, blank=True,validators=[validate_gst],unique=True)
+    gstNo = models.CharField(
+        max_length=200, null=True, blank=True, validators=[validate_gst], unique=True
+    )
 
     def __str__(self):
         return self.user.username
@@ -59,11 +62,11 @@ class Customer(models.Model):
     def address(self):
         address = Address.objects.get(user=self.user)
         return address
-    
+
     @property
     def getGST(self):
         return self.gstNo
-    
+
     @property
     def is_wholeSaleUser(self):
         return True if self.gstNo else False
@@ -103,10 +106,10 @@ class Address(models.Model):
         ):
             return True
         return False
-    
+
     def __str__(self):
         return f"{self.doorNo}, {self.buildingName}, {self.street}, {self.city}, {self.state}, {self.country}, {self.pincode}, {self.landmark}, {self.location}"
-    
+
     class Meta:
         verbose_name = "Address"
         verbose_name_plural = "Addresses"
@@ -122,19 +125,44 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     discription = models.TextField(null=True, blank=True)
     stock = models.IntegerField()
-    product_color = models.ForeignKey("home.Color", on_delete=models.CASCADE, null=True, blank=True)
+    product_color = models.ForeignKey(
+        "home.Color", on_delete=models.CASCADE, null=True, blank=True
+    )
     marketPrice = models.FloatField()
     sellingPrice = models.FloatField()
     images = models.ManyToManyField(image, blank=True)
-    product_size = models.ForeignKey("home.Size", on_delete=models.CASCADE, null=True, blank=True)
+    product_size = models.ForeignKey(
+        "home.Size", on_delete=models.CASCADE, null=True, blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     buy_count = models.IntegerField(default=0)
     rating = models.FloatField(default=0, max_length=5)
+    # additional data
+    tags = ArrayField(models.CharField(max_length=200), blank=True, null=True)
+    gsm = models.FloatField(
+        null=True, blank=True, help_text="Thickness of the material"
+    )
+    fabric = ArrayField(
+        models.CharField(max_length=200),
+        blank=True,
+        null=True,
+        help_text="Material of the product made of",
+    )
+    product_type = models.CharField(max_length=50, blank=True, null=True)
+    sleeve = models.CharField(max_length=50, blank=True, null=True)
+    fit = models.CharField(max_length=50, blank=True, null=True)
+    ideal_for = models.CharField(max_length=50, blank=True, null=True)
+    net_weight = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         colors = self.color_set.all().values_list("color", flat=True)
         colors_str = ", ".join(colors) if colors else "No colors"
         return f"{self.id}. {self.name} ({colors_str}) ({self.stock} in stock)"
+
+    @property
+    def SKU(self):
+        fabric_initials = ''.join([f[0].upper() for f in self.fabric]) if self.fabric else ''
+        return f"{self.id}{self.product_size.size[:1].upper() if self.product_size else 's'}{self.product_color.color[:1].upper() if self.product_color else 'c'}{self.stock}{int(round(self.gsm, 4)) if self.gsm else '0000'}{fabric_initials}{self.product_type[:1].upper() if self.product_type else 'pt'}{self.sleeve[:1].upper() if self.sleeve else 'sl'}{self.fit[:1].upper() if self.fit else 'f'}{int(round(self.net_weight, 4)) if self.net_weight else '0000'}{self.ideal_for[:1].upper() if self.ideal_for else 'if'}"
 
     @property
     def mainImage(self):
@@ -164,14 +192,16 @@ class Product(models.Model):
     def sizes(self):
         return ", ".join(self.size_set.all().values_list("size", flat=True))
 
+
 class BulkProductItem(models.Model):
     bulk = models.ForeignKey("home.BulkProducts", on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     bulk_qty = models.IntegerField(default=1)
-    
+
     def __str__(self):
         return self.product.name
-    
+
+
 class BulkProducts(models.Model):
     name = models.CharField(max_length=200)
     discription = models.TextField(null=True, blank=True)
@@ -179,19 +209,24 @@ class BulkProducts(models.Model):
     wholeSellPrice = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     img = models.ImageField(upload_to="bulk_pic/", null=True, blank=True)
-    
+
     def __str__(self):
         return self.name
-    
+
     @property
     def bulk_items(self):
         return BulkProductItem.objects.filter(bulk=self)
-    
+
+
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField(default=1)
-    size = models.ForeignKey("home.Size", on_delete=models.CASCADE, null=True, blank=True)
-    color = models.ForeignKey("home.Color", on_delete=models.CASCADE, null=True, blank=True)
+    size = models.ForeignKey(
+        "home.Size", on_delete=models.CASCADE, null=True, blank=True
+    )
+    color = models.ForeignKey(
+        "home.Color", on_delete=models.CASCADE, null=True, blank=True
+    )
     date_added = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -310,7 +345,9 @@ class Size(models.Model):
         ("XXL", "Extra Extra Large"),
     ]
     size = models.CharField(max_length=50, choices=size_opt, null=True, blank=True)
-    products = models.ManyToManyField(Product, blank=True, verbose_name="Products Sizes")
+    products = models.ManyToManyField(
+        Product, blank=True, verbose_name="Products Sizes"
+    )
     shoulder = models.FloatField(null=True, blank=True)
     chest = models.FloatField(null=True, blank=True)
     top_length = models.FloatField(null=True, blank=True)
@@ -319,7 +356,6 @@ class Size(models.Model):
     hip = models.FloatField(null=True, blank=True)
     pant_length = models.FloatField(null=True, blank=True)
     thigh = models.FloatField(null=True, blank=True)
-    
 
     def __str__(self):
         # return f"{self.size} => Shoulder : {self.shoulder} | Chest: {self.chest} | Top Length: {self.top_length} | Sleeve Length: {self.sleev_length} | Waist: {self.waist} | Hip: {self.hip} | Pant Length: {self.pant_length} | Thigh: {self.thigh}"
@@ -352,3 +388,22 @@ class CartItem(models.Model):
     @property
     def user(self):
         return self.customer.user.username
+
+
+class Review(models.Model):
+    user = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    rating = models.FloatField()
+    review = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.product.name} - {self.rating} - {self.user.user.username}"
+
+    @property
+    def get_user(self):
+        return self.user.user.username
+
+    @property
+    def get_product(self):
+        return self.product.name

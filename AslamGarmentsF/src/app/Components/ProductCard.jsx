@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { useEffect, useState } from "react";
 import { baseurl } from "../utils/Url";
+import Link from "next/link";
 
 
 const badgeColors = [
@@ -27,12 +28,12 @@ export default function ProductCard({ product }) {
     return (
         <div className="product__item" data-aos="fade-up">
             <div className="product__banner">
-                <a href="/shop/product" className="product__images">
+                <Link href={`/shop/product/${product.id}`} className="product__images">
                     <Image
                         src={baseurl+"/"+product.img1}
                         alt={product.name}
-                        width={500}
-                        height={500}
+                        width={600}
+                        height={600}
                         className="product__img default"
                         priority
                         data-aos="zoom-in"
@@ -41,13 +42,13 @@ export default function ProductCard({ product }) {
                     <Image
                         src={baseurl+"/"+product.img2}
                         alt={product.name}
-                        width={500}
-                        height={500}
+                        width={600}
+                        height={600}
                         className="product__img hover"
                         loading="lazy"
                         priority={false}
                     />
-                </a>
+                </Link>
                 <div className="product__actions">
                     <a href="#" className="action__btn bg-gray-200 opacity-80 hover:bg-gray-400" aria-label="Quick View">
                         <i className="fi fi-rs-eye"></i>
@@ -63,17 +64,17 @@ export default function ProductCard({ product }) {
             </div>
             <div className="product__content">
                 <span className="product__category"data-aos="fade-left" data-aos-anchor-placement="bottom-bottom"data-aos-offset="50">{product.category}</span>
-                <a href="/shop/product">
+                <Link href={`/shop/product/${product.id}`}>
                     <h3 className="product__title"data-aos="zoom-out" data-aos-anchor-placement="bottom-bottom"data-aos-offset="50">{product.name}</h3>
-                </a>
+                </Link>
                 <div className="product__rating">
                     {[...Array(product.rating)].map((_, i) => (
                         <i key={i} className="fi fi-rs-star" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom"data-aos-offset="50" data-aos-delay={(i*250)+100} ></i>
                     ))}
                 </div>
-                <div className="product__price flex">
-                    <span className="new__price"data-aos="zoom-out" data-aos-anchor-placement="bottom-bottom"data-aos-offset="50">${product.oldPrice}</span>
-                    <span className="old__price"data-aos="zoom-out" data-aos-anchor-placement="bottom-bottom"data-aos-offset="50">${product.newPrice}</span>
+                <div className="product__price flex">   
+                    <span className="new__price"data-aos="zoom-out" data-aos-anchor-placement="bottom-bottom"data-aos-offset="50">₹{product.oldPrice}</span>
+                    <span className="old__price"data-aos="zoom-out" data-aos-anchor-placement="bottom-bottom"data-aos-offset="50">₹{product.newPrice}</span>
                 </div>
                 <a
                     href="#"
