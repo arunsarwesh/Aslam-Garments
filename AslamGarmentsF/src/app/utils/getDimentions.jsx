@@ -1,30 +1,33 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export default function useWindowDimensions() {
-
-  const hasWindow = typeof window !== 'undefined';
-
-  function getWindowDimensions() {
-    const width = hasWindow ? window.innerWidth : null;
-    const height = hasWindow ? window.innerHeight : null;
-    return {
-      width,
-      height,
-    };
-  }
-
-  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+  const [windowDimensions, setWindowDimensions] = useState({
+    width: typeof window !== "undefined" ? window.innerWidth : null,
+    height: typeof window !== "undefined" ? window.innerHeight : null,
+  });
 
   useEffect(() => {
-    if (hasWindow) {
-      function handleResize() {
-        setWindowDimensions(getWindowDimensions());
-      }
+    // Check if running in a browser
+    if (typeof window === "undefined") return;
 
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
+    function handleResize() {
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
     }
-  }, [hasWindow]);
+
+    // Set initial dimensions
+    handleResize();
+
+    // Add resize listener
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup on unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return windowDimensions;
 }

@@ -44,12 +44,8 @@ export default function LoginSection({ onToggleFlip }) {
                 localStorage.setItem("token", res.data.token);
                 localStorage.setItem("email", res.data.email);
                 localStorage.setItem("username", res.data.username);
-                toast.success("Login Successful", { autoClose: 5000, position: "top-right" });
-                if (document.referrer === window.location.href) {
-                    window.location.href = "/";
-                } else {
-                    window.history.back();
-                }
+                toast.success("Login Successful");
+                window.history.back();
             })
             .catch((err) => {
                 // console.log(err.response.data.error);

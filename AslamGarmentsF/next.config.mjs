@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-      domains: ['localhost', 'titandev.me'], // Add both 'localhost' and 'titandev.me' or any other domain as needed
+      domains: ['localhost', 'titandev.me',"robohash.org"], // Add both 'localhost' and 'titandev.me' or any other domain as needed
     },
   };
   

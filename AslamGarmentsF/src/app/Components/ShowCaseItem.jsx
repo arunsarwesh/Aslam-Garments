@@ -11,7 +11,7 @@ export default function ShowCaseItem({item}) {
                     alt={item.name}
                     width={300}
                     height={300}
-                    className="showcase__img"
+                    className="w-20 h-20 rounded-md"
                 />
             </a>
             <div className="showcase__content">

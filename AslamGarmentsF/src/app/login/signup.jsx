@@ -26,9 +26,17 @@ export default function SignupSection({ onToggleFlip }) {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [phone, setPhone] = useState("");
     const [open, setOpen] = useState(false);
+    const [profilePic, setProfilePic] = useState(null);
+    const [profilePicPreview, setProfilePicPreview] = useState(null);
 
     const togglePass = () => {
         setOpen(!open);
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setProfilePic(file);
+        setProfilePicPreview(URL.createObjectURL(file));
     };
 
     const Submit = (e) => {
@@ -56,11 +64,20 @@ export default function SignupSection({ onToggleFlip }) {
             });
             return;
         }
-        axios.post(`${baseurl}/signup/`, {
-            username: username,
-            password: password,
-            phone: phone,
-            email: email
+
+        const formData = new FormData();
+        formData.append("username", username);
+        formData.append("password", password);
+        formData.append("phone", phone);
+        formData.append("email", email);
+        if (profilePic) {
+            formData.append("pic", profilePic);
+        }
+
+        axios.post(`${baseurl}/signup/`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
         }).then((res) => {
             if (res.data.message === "User Created Successfully") {
                 toast.success("Registration Successful", { autoClose: 5000, position: "top-right" });
@@ -71,7 +88,10 @@ export default function SignupSection({ onToggleFlip }) {
                 }
             }
         }).catch((err) => {
-            toast.error("Something went wrong", { autoClose: 5000, position: "top-right" });
+            console.log(err)
+            for (let key in err.response.data){
+                toast.error(err.response.data[key],{autoClose:5000,position: "top-right"})
+            }
         });
     }
 
@@ -153,6 +173,20 @@ export default function SignupSection({ onToggleFlip }) {
                         className="mx-4 cursor-pointer"
                     />
                 </label>
+                <label htmlFor="profilePic">
+                    <input
+                        type="file"
+                        name="profilePic"
+                        className="form__input w-full"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                    />
+                </label>
+                {profilePicPreview && (
+                    <div className="image-preview mt-4">
+                        <img src={profilePicPreview} alt="Profile Preview" className="profile-pic-preview w-32 h-32 rounded border object-cover mx-auto" />
+                    </div>
+                )}
                 <div className="form__btn">
                     <button type="submit" className="btn" onClick={(e) => Submit(e)}>Submit & Register</button>
                 </div>

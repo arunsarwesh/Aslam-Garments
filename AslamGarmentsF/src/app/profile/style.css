@@ -11,4 +11,90 @@
     .account__tabs p b{
         display: none;
     }
+    .form__field{
+        width: 100%;
+        min-width: 100%;
+    }
+    .selection{
+        min-width: 52%;
+    }
+    .form__input{
+        width: 100%;
+        max-width: 200px;
+    }
+    .textarea{
+        width: 100%;
+    }
+    .topc{
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .form__field{
+        width: 100%;
+    }
+    
+}
+
+.svg{
+    fill: white;
+    transition: all 0.3s ease;
+}
+.form__btn{
+    display: flex;
+    justify-content: left;
+    margin-top: 1rem;
+    margin-left: 1%;
+}
+
+.form__btn button:disabled{
+    cursor: not-allowed ;
+    user-select: none;
+    opacity: 0.8;
+    filter: grayscale(.4);
+}
+
+
+
+.btn:hover .svg{
+    fill: var(--first-color);
+}
+
+
+.tab__header i {
+    color: var(--first-color);
+    cursor: pointer;
+    float: right;
+}
+
+.form__field{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    /* border: 1px solid black;  */
+    width: 70%;
+    /* margin: auto ; */
+    margin-left: 1%;
+}
+
+.form__field input:disabled,
+label input:disabled{
+    background-color: #f5f5f5;
+    opacity: 0.7;
+}
+
+.selection{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    /* border: 1px solid black;  */
+    width: 36.5%;
+}
+
+input[type="radio"]{
+    margin-right: 0.5rem;
 }

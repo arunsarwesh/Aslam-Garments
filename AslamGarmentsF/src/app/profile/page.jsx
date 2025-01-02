@@ -5,6 +5,7 @@ import Navbar from "../Components/Navbar";
 import NewsLetter from "../Components/NewsLetterSH";
 import { useEffect } from "react";
 import AccountsSection from "./profileS";
+import { ToastContainer } from "react-toastify";
 
 export default function ProfilePage() {
   useEffect(()=>{
@@ -13,6 +14,7 @@ export default function ProfilePage() {
   return (
     <>
       <Navbar page={"My Account"} />
+      <ToastContainer/>
       <main className="main">
         <section className="breadcrumb">
           <ul className="breadcrumb__list flex container">

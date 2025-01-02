@@ -1,62 +1,70 @@
-export default function AddInfoTab() {
+export default function AddInfoTab({ product }) {
     return (
         <table className="info__table">
             <tbody>
                 <tr>
-                    <th>Stand Up</th>
-                    <td>35&quot; L x 24&quot;W x 37-45&quot;H(front to back wheel)</td>
+                    <th>SKU</th>
+                    <td>{product.SKU}</td>
                 </tr>
                 <tr>
-                    <th>Folded (w/o wheels)</th>
-                    <td>32.5&quot;L x 18.5&quot;W x 16.5&quot;H</td>
+                    <th>Name</th>
+                    <td>{product.name}</td>
                 </tr>
                 <tr>
-                    <th>Folded (w/o wheels)</th>
-                    <td>32.5&quot;L x 24&quot;W x 18.5&quot;H</td>
+                    <th>Description</th>
+                    <td>{product.description}</td>
                 </tr>
                 <tr>
-                    <th>Door Pass THrough</th>
-                    <td>24</td>
+                    <th>Stock</th>
+                    <td>{product.stock}</td>
                 </tr>
                 <tr>
-                    <th>Frame</th>
-                    <td>Aluminum</td>
+                    <th>Market Price</th>
+                    <td>₹{product.market_price}</td>
                 </tr>
                 <tr>
-                    <th>Weight (w/o wheels)</th>
-                    <td>20 LBS</td>
+                    <th>Selling Price</th>
+                    <td>₹{product.selling_price}</td>
                 </tr>
                 <tr>
-                    <th>Weight Capacity</th>
-                    <td>60 LBS</td>
+                    <th>GSM</th>
+                    <td>{product.gsm}</td>
                 </tr>
                 <tr>
-                    <th>Width</th>
-                    <td>24</td>
+                    <th>Fabric</th>
+                    <td>{product.fabric.join(', ')}</td>
                 </tr>
                 <tr>
-                    <th>Handle Height (ground to handle)</th>
-                    <td>37-45</td>
+                    <th>Product Type</th>
+                    <td>{product.product_type}</td>
                 </tr>
                 <tr>
-                    <th>Wheels</th>
-                    <td>12&quot; air / wide track slick tread</td>
+                    <th>Sleeve</th>
+                    <td>{product.sleeve}</td>
                 </tr>
                 <tr>
-                    <th>Seat back height</th>
-                    <td>21.5</td>
+                    <th>Fit</th>
+                    <td>{product.fit}</td>
                 </tr>
                 <tr>
-                    <th>Head Room(inside canopy)</th>
-                    <td>25&quot;</td>
+                    <th>Ideal For</th>
+                    <td>{product.ideal_for}</td>
                 </tr>
                 <tr>
-                    <th>Color</th>
-                    <td>Black, Blue, Red, White</td>
+                    <th>Net Weight</th>
+                    <td>{product.net_weight} g</td>
+                </tr>
+                {/* <tr>
+                    <th>Colors</th>
+                    <td>{product.colors.map(color => color.color).join(', ')}</td>
+                </tr> */}
+                <tr>
+                    <th>Sizes</th>
+                    <td>{product.avail_size.map(size => size.size).join(', ')}</td>
                 </tr>
                 <tr>
-                    <th>Size</th>
-                    <td>M, S</td>
+                    <th>Tags</th>
+                    <td>{product.tags.join(', ')}</td>
                 </tr>
             </tbody>
         </table>

@@ -31,8 +31,6 @@ export default function Shop() {
         AOS.init({duration:500});
       }, []);
 
-
-
       const [products, setProducts] = useState([]);
 
       useEffect(()=>{
@@ -445,6 +443,7 @@ export default function Shop() {
             type: "Newly Added",
         },
     ]
+    
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10); // Default value
     const totalPages = Math.ceil(products.length / itemsPerPage); 

@@ -1,51 +1,65 @@
+"use client"
+import "react-toastify/dist/ReactToastify.css";
+import "./style.css"
 import FootBar from "@/app/Components/footer";
 import Navbar from "@/app/Components/Navbar";
 import NewsLetter from "@/app/Components/NewsLetterSH";
-import product22 from "@/app/assets/img/product-2-2.jpg";
-import product31 from "@/app/assets/img/product-3-1.jpg";
-import product32 from "@/app/assets/img/product-3-2.jpg";
-import product41 from "@/app/assets/img/product-4-1.jpg";
-import product42 from "@/app/assets/img/product-4-2.jpg";
-import product51 from "@/app/assets/img/product-5-1.jpg";
 import Image from "next/image";
 import Link from "next/link";
-import "./style.css"
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import { baseurl } from "@/app/utils/Url";
 
 
 export default function CartPage() {
-  const products = [
-    {
-      id: 1,
-      images: [product22, product31],
-      name: "Product 1 Name",
-      description: "Description for Product 1.",
-      price: 110,
-      qty: 5,
-      stock: 20,
-    },
-    {
-      id: 2,
-      images: [product32, product41],
-      name: "Product 2 Name",
-      description: "Description for Product 2.",
-      price: 120,
-      qty: 3,
-      stock: 5,
-    },
-    {
-      id: 3,
-      images: [product42, product51],
-      name: "Product 3 Name",
-      description: "Description for Product 3.",
-      price: 130,
-      qty: 2,
-      stock: 0,
-    },
-  ];
+
+  const [token, setToken] = useState();
+  const [products, setProducts] = useState([]);
+
+
+  const updateCart = (operation, cartID) => {
+    toast.promise(
+      axios.post(`${baseurl}/cart/`, {
+        action: operation,
+        cartID: cartID
+      }, {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      }).then((res) => {
+        console.log(res.data);
+        setProducts(res.data.cart);
+      }).catch((err) => {
+        console.log(err);
+        throw err;
+      }),
+      {
+        pending: 'Updating cart...',
+        success: 'Cart updated successfully!',
+        error: 'Error updating cart'
+      }
+    );
+  }
+
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+    axios.get(`${baseurl}/cart/`, {
+      headers: {
+        Authorization: `Token ${localStorage.getItem("token")}`
+      }
+    }).then((res) => {
+      console.log(res.data);
+      setProducts(res.data.cart);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [])
 
   return (
     <>
       <Navbar page={"Cart"} />
+      <ToastContainer />
       <main className="main">
         <section className="breadcrumb">
           <ul className="breadcrumb__list flex container">
@@ -64,6 +78,7 @@ export default function CartPage() {
                 <tr>
                   <th>Image</th>
                   <th>Name</th>
+                  <th>Size</th>
                   <th>Price</th>
                   <th>Quantity</th>
                   <th>Subtotal</th>
@@ -72,33 +87,43 @@ export default function CartPage() {
               </thead>
               <tbody>
 
-                {products.map((product, index) => (
-                  <tr key={index}>
-                    <td>
-                      <Image
-                        src={product.images[0]} // Display the first image
-                        alt={product.name}
-                        className="table__img"
-                        width={100}
-                        height={100}
-                      />
-                    </td>
-                    <td>
-                      <h3 className="table__title">{product.name}</h3>
-                      <p className="table__description">{product.description}</p>
-                    </td>
-                    <td>
-                      <span className="table__price">${product.price}</span>
-                    </td>
-                    <td className="flex-col justify-center">
-                      <i className="fi fi-rs-minus-small"></i>
-                      <span className="qty">{product.qty}</span>
-                      <i className="fi fi-rs-plus-small"></i>
-                    </td>
-                    <td><span className="subtotal">${product.qty * product.price}</span></td>
-                    <td><i className="fi fi-rs-trash table__trash"></i></td>
-                  </tr>
-                ))}
+                {products && products.length > 0 ?
+                  products.map((product, index) => (
+                    <tr key={index}>
+                      <td>
+                        <Image
+                          src={baseurl + "/" + product.product.images[0].image}
+                          alt={product.product.name}
+                          className="table__img m-auto"
+                          width={100}
+                          height={100}
+                        />
+                      </td>
+                      <td>
+                        <h3 className="table__title">{product.product.name}</h3>
+                        <p className="table__description">
+                          {product.product.discription.length > 60 ?
+                            `${product.product.discription.slice(0, 60)}...` :
+                            product.product.discription}
+                        </p>
+                      </td>
+                      <td>
+                        <span className="table__price">{product.size.size}</span>
+                      </td>
+                      <td>
+                        <span className="table__price">${product.product.sellingPrice}</span>
+                      </td>
+                      <td className="flex-col justify-center">
+                        <i className="fi fi-rs-minus-small" onClick={() => { updateCart("r", product.id) }}></i>
+                        <span className="qty">{product.quantity}</span>
+                        <i className="fi fi-rs-plus-small" onClick={() => { updateCart("a", product.id) }}></i>
+                      </td>
+                      <td><span className="subtotal">${product.quantity * product.product.sellingPrice}</span></td>
+                      <td><i className="fi fi-rs-trash table__trash" onClick={() => { updateCart("d", product.id) }}></i></td>
+                    </tr>
+                  ))
+                  : <tr><td colSpan="6"><h1 className="text-left text-xl">No Items in Cart</h1></td></tr>
+                }
 
               </tbody>
             </table>
@@ -106,10 +131,12 @@ export default function CartPage() {
 
           <div className="cart__actions">
             <a href="#" className="btn flex btn__md">
-              <i className="fi-rs-shuffle"></i> Update Cart
+              <i className="fi-rs-shuffle"></i>
+              Continue Shopping
             </a>
             <a href="#" className="btn flex btn__md">
-              <i className="fi-rs-shopping-bag"></i> Continue Shopping
+              <i className="fi-rs-shopping-bag"></i>
+              Buy All
             </a>
           </div>
 
@@ -117,7 +144,7 @@ export default function CartPage() {
             <i className="fi fi-rs-fingerprint"></i>
           </div>
 
-          <div className="cart__group grid">
+          {/* <div className="cart__group grid">
             <div className="cart__total">
               <h3 className="section__title">Cart Totals</h3>
               <table className="cart__total-table">
@@ -140,7 +167,7 @@ export default function CartPage() {
                 <i className="fi fi-rs-box-alt"></i> Proceed To Checkout
               </a>
             </div>
-          </div>
+          </div> */}
         </section>
 
         <NewsLetter />

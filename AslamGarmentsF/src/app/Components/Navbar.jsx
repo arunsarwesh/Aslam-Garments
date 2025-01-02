@@ -16,8 +16,10 @@ const Navbar = ({ page }) => {
         setIsMenuOpen(!isMenuOpen);
     };
     useEffect(() => {
-        setUser(localStorage.getItem("username"));
-    })
+        if (typeof window !== 'undefined') {
+            setUser(localStorage.getItem("username"));
+        }
+    }, [])
 
     // Define your navigation items here
     const navItems = [
@@ -26,7 +28,7 @@ const Navbar = ({ page }) => {
         { href: "/profile", label: "My Account" },
         { href: "/shop/compare", label: "Compare" },
         { href: "/shop/cart", label: "Cart" },
-    ];
+    ]; 
 
     return (
         <header className="header">
@@ -43,9 +45,15 @@ const Navbar = ({ page }) => {
                         (
                             <p className="header__top-action">Hello, {user} !!!</p>
                         ) : (
-                            <Link href="/login" className="header__top-action">
-                                Log In / Sign Up
-                            </Link>
+                            <div>
+                                <Link href="/login" className="header__top-action">
+                                    Log In
+                                </Link>
+                                /
+                                <Link href="/login#signup" className="header__top-action">
+                                    Sign Up
+                                </Link>
+                            </div>
                         )}
                 </div>
             </div>
@@ -82,8 +90,9 @@ const Navbar = ({ page }) => {
                             type="text"
                             placeholder="Search For Items..."
                             className="form__input"
+                            suppressHydrationWarning
                         />
-                        <button className="search__btn">
+                        <button className="search__btn" suppressHydrationWarning>
                             <Image src={search} alt="search icon" />
                         </button>
                     </div>

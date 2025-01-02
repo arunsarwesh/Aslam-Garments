@@ -38,13 +38,13 @@ export default function LoginSignup() {
                     <div className={`login-register__container container grid ${isFlip ? 'flipped' : ''}`}>
                         <div className="flip-card">
                             <div className="flip-card-inner">
-                                <div className="flip-card-front">
+                                <div className="flip-card-front m-auto">
                                     <LoginSection onToggleFlip={toggleFlip} />
                                 </div>
-                                <div className="flip-card-back">
+                                <div className="flip-card-back m-auto">
                                     <SignupSection onToggleFlip={toggleFlip} />
                                 </div>
-                            </div>
+                            </div>                            
                         </div>
                     </div>
                 </section>

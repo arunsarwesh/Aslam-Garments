@@ -9,8 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@flaticon/flaticon-uicons": "^3.3.1",
+    "@nextui-org/alert": "^2.2.7",
+    "@nextui-org/react": "^2.6.8",
+    "@nextui-org/system": "^2.4.4",
+    "@nextui-org/theme": "^2.4.3",
     "aos": "^2.3.4",
     "axios": "^1.7.7",
+    "framer-motion": "^11.14.4",
     "next": "15.0.2",
     "password-validator": "^5.3.0",
     "react": "^18.2.0",

@@ -22,12 +22,26 @@ export default function ReviewForm({ pid }) {
         const data = {
             rating: rating,
             review: review,
-            product: pid
+            product: pid,
         }
-        axios.post(`${baseurl}/addReview/`, data,{
+        axios.post(`${baseurl}/review/`, data,{
             headers:{
                 Authorization: `Token ${localStorage.getItem("token")}`
             }
+        }).then((res)=>{
+            if (res.data.message==="Success"){
+                console.log(res.data);
+                toast.success("Review Added Successfully",{position:"top-center",autoClose:5000})
+                setRating(0);
+                setReview("");
+            }
+            else{
+                console.log(res.data);
+                toast.error("Error Occured",{position:"top-center",autoClose:5000})
+            }
+        }).catch((err)=>{
+            console.log(err);
+            toast.error("Error Occured",{position:"top-center",autoClose:5000})
         })
     }
 
@@ -43,7 +57,6 @@ export default function ReviewForm({ pid }) {
                         onMouseLeave={() => setHoverRating(0)}
                         className={`fi fi-rs-star hover:text-orange-400 m-1 transition-all duration-200 ${hoverRating >= i + 1 || rating >= i + 1 ? "text-orange-400 drop-shadow-sm" : "text-black "}`}
                     ></i>
-
                 ))}
             </div>
             <form className="form grid">
@@ -51,6 +64,7 @@ export default function ReviewForm({ pid }) {
                     className="form__input textarea"
                     placeholder="Write Comment"
                     value={review}
+                    suppressHydrationWarning
                     onChange={(e) => setReview(e.target.value)}
                 ></textarea>
                 <div className="form__btn">

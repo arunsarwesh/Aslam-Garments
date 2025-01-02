@@ -4,6 +4,7 @@ import Image from "next/image"
 import { useEffect, useState } from "react";
 import { baseurl } from "../utils/Url";
 import Link from "next/link";
+import "./style.css";
 
 
 const badgeColors = [
@@ -28,13 +29,13 @@ export default function ProductCard({ product }) {
     return (
         <div className="product__item" data-aos="fade-up">
             <div className="product__banner">
-                <Link href={`/shop/product/${product.id}`} className="product__images">
+                <Link href={`/shop/product/${product.slug}`} className="product__images">
                     <Image
                         src={baseurl+"/"+product.img1}
                         alt={product.name}
                         width={600}
                         height={600}
-                        className="product__img default"
+                        className="product__img default w-full h-80 rounded-3xl"
                         priority
                         data-aos="zoom-in"
                         data-aos-delay="200"
@@ -44,7 +45,7 @@ export default function ProductCard({ product }) {
                         alt={product.name}
                         width={600}
                         height={600}
-                        className="product__img hover"
+                        className="product__img hover w-full h-80 rounded-3xl"
                         loading="lazy"
                         priority={false}
                     />

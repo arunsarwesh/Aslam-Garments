@@ -70,69 +70,19 @@ export default function ProductPage({ params: paramsPromise }) {
             },
         ]
     });
+    const [variants, setVariants] = useState({product:[]});
+    const [tr, setTr] = useState(null);
 
     useEffect(() => {
-        console.log(params.slug);
         axios.get(`${baseurl}/getProduct/${params.slug}/`)
             .then((res) => {
-                console.log(res.data);
                 setProduct(res.data.product);
+                setVariants(res.data.variants);
             })
             .catch((err) => {
                 console.log(err);
             });
     }, [params.slug]);
-
-    const product = {
-        name: "Henley Shirt",
-        brand: "Addidas",
-        newPrice: "$116",
-        oldPrice: "$200.00",
-        savePrice: "25% Off",
-        description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-      Voluptate, fuga. Quo blanditiis recusandae facere nobis cum optio,
-      inventore aperiam placeat, quis maxime nam officiis illum? Optio
-      et nisi eius, inventore impedit ratione sunt, cumque, eligendi
-      asperiores iste porro non error?`,
-        warranty: "1 Year Al Jazeera Brand Warranty",
-        returnPolicy: "30 Days Return Policy",
-        paymentOption: "Cash on Delivery available",
-        colors: [
-            { name: "Cyan", className: "bg-cyan-400" },
-            { name: "Green", className: "bg-green-400" }
-        ],
-        sizes: ["M", "L", "XL", "XXL"],
-        sku: "FWM15VKT",
-        tags: ["Clothes", "Women", "Dress"],
-        availability: "8 Items in Stock",
-        images: [
-            product11,
-            product12,
-        ],
-        reviews: [
-            {
-                name: "Jacky Chan",
-                image: avatar1,
-                rating: 2,
-                description: "Thank you, very fast shipping from Poland only 3 days.",
-                date: "December 4, 2022 at 3:12 pm",
-            },
-            {
-                name: "Meriem Js",
-                image: avatar2,
-                rating: 5,
-                description: "Great low price and works well",
-                date: "August 23, 2022 at 19:45 pm",
-            },
-            {
-                name: "Moh Benz",
-                image: avatar3,
-                rating: 4,
-                description: "Authentic and beautiful, Love these ways more than ever expected, They are great earphones.",
-                date: "March 2, 2021 at 10:01 am",
-            },
-        ]
-    };
 
     const [xtra, setXtra] = useState("RV");
 
@@ -145,20 +95,20 @@ export default function ProductPage({ params: paramsPromise }) {
                     <ul className="breadcrumb__list flex container">
                         <li><Link href="/" className="breadcrumb__link">Home</Link></li>
                         <li><span className="breadcrumb__link"></span>  〉</li>
-                        <li><span className="breadcrumb__link">Fashion</span></li>
+                        <li><Link href={"/shop/"} className="breadcrumb__link">Shop</Link></li>
                         <li><span className="breadcrumb__link"></span>  〉</li>
                         <li><span className="breadcrumb__link">{productttz.name}</span></li>
                     </ul>
                 </section>
 
-                <DisplaySec product={productttz} />
+                <DisplaySec product={productttz} variants={variants} />
 
                 <section className="details__tab container">
                     <SizeChart product={productttz} />
 
                     <div className="detail__tabs">
                         <span onClick={() => setXtra("RV")} className={xtra === "RV" ? `detail__tab active-tab rativ` : "detail__tab"} data-target="#reviews">
-                            Reviews ({product.reviews.length})
+                            Reviews {tr?<b className="rc">{tr}</b>:<></>}
                         </span>
                         <span onClick={() => setXtra("AI")} className={xtra === "AI" ? `detail__tab active-tab rativ` : "detail__tab"} data-target="#info">
                             Additional Info
@@ -167,15 +117,15 @@ export default function ProductPage({ params: paramsPromise }) {
                     <div className="details__tabs-content">
                         {xtra === "AI" &&
                             <div className={xtra === "AI" ? `detail__tab-content active-tab` : "detail__tab-content"} id="info">
-                                <AddInfoTab />
+                                <AddInfoTab product={productttz} />
                             </div>
                         }
                         {xtra === "RV" &&
                             <div className={xtra === "RV" ? `detail__tab-content active-tab` : "detail__tab-content"} id="reviews">
-                                <Reviwes product={product} />
+                                <Reviwes pid={productttz.id} setTR={setTr} />
                             </div>
                         }
-                        <ReviewForm />
+                        <ReviewForm pid={params.slug}/>
                     </div>
                 </section>
                 <section className="products container section--lg">

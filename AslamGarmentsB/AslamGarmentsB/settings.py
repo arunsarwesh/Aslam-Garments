@@ -34,11 +34,12 @@ ALLOWED_HOSTS = ["*"]
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 CORS_ORIGIN_ALLOW_ALL = True
-APPEND_SLASH = True
 SECURE_SSL_REDIRECT = False
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 '''
+
+APPEND_SLASH = True
 
 DEBUG = True
 
@@ -163,6 +164,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# AUTH_USER_MODEL = "home.Customer"
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -227,7 +230,7 @@ JAZZMIN_SETTINGS = {
         "home.Color": "fas fa-palette",
         "home.ProductVariant": "fas fa-th-list",  # Updated icon for ProductVariant
     },
-    "related_modal_active": True,
+    "related_modal_active": False,
     "custom_css": None,
     "custom_js": None,
     "show_ui_builder": False,

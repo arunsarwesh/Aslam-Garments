@@ -4,15 +4,17 @@ from . import models
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)  # Password field for writing only
+    phone = serializers.CharField(required=False)
+    pic = serializers.ImageField(required=False)
 
     class Meta:
-        model = models.User
-        fields = ["username", "email", "password"]
+        model = models.Customer
+        fields = ["username", "email", "password", "phone","pic"]
 
     def create(self, validated_data):
-        user = models.User(
-            email=validated_data["email"], username=validated_data["username"]
-        )
+        user = models.Customer(email=validated_data["email"], username=validated_data["username"],phone=validated_data["phone"])
+        if "pic" in validated_data:
+            user.pic = validated_data["pic"]
         user.set_password(validated_data["password"])
         user.save()
         return user
@@ -20,15 +22,11 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.email = validated_data.get("email", instance.email)
         instance.username = validated_data.get("username", instance.username)
-        instance.set_password(validated_data.get("password", instance.password))
+        instance.phone = validated_data.get("phone", instance.phone)
+        if "password" in validated_data:
+            instance.set_password(validated_data["password"])        
         instance.save()
         return instance
-
-
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.image
-        fields = ["image", "is_main"]
 
 
 class ColorSerializer(serializers.ModelSerializer):
@@ -49,24 +47,29 @@ class SizeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ProductImages
+        fields = "__all__"
+
+
 class ProductSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(many=True, read_only=True)
-    colors = ColorSerializer(source="color_set", many=True, read_only=True)
+    images = ProductImageSerializer(many=True, read_only=True)
     category = CategorySerializer(source="category_set", many=True, read_only=True)
     product_color = ColorSerializer(read_only=True)
     product_size = SizeSerializer(read_only=True)
-    sizes = SizeSerializer(source="size_set", many=True, read_only=True)
+    avail_size = SizeSerializer(many=True, read_only=True)
     SKU = serializers.CharField(read_only=True)
 
     class Meta:
         model = models.Product
         fields = "__all__"
 
-class ProductVariantSerializer(serializers.ModelSerializer):
+class ProductGroupSerial(serializers.ModelSerializer):
     product = ProductSerializer(many=True, read_only=True)
 
     class Meta:
-        model = models.ProductVariant
+        model = models.ProductGroup
         fields = "__all__"
 
 
@@ -82,12 +85,6 @@ class CartItemSerializer(serializers.ModelSerializer):
         fields = ["product", "quantity", "size", "color"]
 
 
-class OrderItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.OrderItem
-        fields = ["product", "quantity", "size", "color"]
-
-
 class SendCartItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
     size = SizeSerializer()
@@ -98,10 +95,13 @@ class SendCartItemSerializer(serializers.ModelSerializer):
         fields = ["id", "product", "quantity", "size", "color"]
 
 
-class AddressSerializer(serializers.ModelSerializer):
+class ShippingAddressSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Address
+        model = models.ShippingAddress
         fields = "__all__"
+        extra_kwargs = {
+            "user": {"read_only": True}
+        }
 
 
 class GetUserSerializer(serializers.ModelSerializer):
@@ -109,38 +109,53 @@ class GetUserSerializer(serializers.ModelSerializer):
         model = models.User
         fields = ["username", "email"]
 
-class OIS(serializers.ModelSerializer):
-    product = ProductSerializer()
-    class Meta:
-        model = models.OrderItem
-        fields = ["product", "quantity", "size", "color"]
-
 class OrderSerializer(serializers.ModelSerializer):
-    products = OIS(many=True, read_only=True)
-
     class Meta:
         model = models.Order
         fields = "__all__"
 
-class BIS(serializers.ModelSerializer):
-    product = ProductSerializer()
-    class Meta:
-        model = models.BulkProductItem
-        fields = "__all__"
-
-class BulkProductSerializer(serializers.ModelSerializer):
-    bulk_items = BIS(many=True, read_only=True)
-    class Meta:
-        model = models.BulkProducts
-        fields = ["id", "name", "discription", "marketPrice", "wholeSellPrice", "bulk_items","img"]
 
 class HomeProductSerial(serializers.ModelSerializer):
-    images = ImageSerializer(many=True, read_only=True)
     class Meta:
         model = models.Product
-        fields = ["id", "name", "sellingPrice","marketPrice", "images","rating","buy_count"]
+        fields = ["id", "name","discription", "sellingPrice","marketPrice", "images","rating","buy_count"]
     
 class PostReviewSerial(serializers.ModelSerializer):
+    product = serializers.CharField()
     class Meta:
         model = models.Review
         fields = ["product","rating","review"]
+
+class ReviewUserSerial(serializers.ModelSerializer):
+    class Meta:
+        model = models.Customer
+        fields = ["pic","username"]
+
+class PutReviewSerial(serializers.ModelSerializer):
+    user = ReviewUserSerial()
+    class Meta:
+        model = models.Review
+        fields = ["rating","review","user","created_at"]
+
+class GetCartSerial(serializers.ModelSerializer):
+    product = HomeProductSerial()
+    size = SizeSerializer()
+    class Meta:
+        model = models.CartItem
+        fields  = ["id",'product','quantity','size','color']
+
+class ProfileInfoSerial(serializers.ModelSerializer):
+    class Meta:
+        model = models.Customer
+        fields = ["username","first_name","last_name","email","phone","gender","pic"]
+        extra_kwargs = {
+            "pic": {"read_only": True}
+        }
+        
+    def validate_email(self, value):
+        user_id = self.instance.id if self.instance else None
+        if models.Customer.objects.filter(email=value).exclude(id=user_id).exists():
+            raise serializers.ValidationError("This email is already in use.")
+        return value
+        
+        

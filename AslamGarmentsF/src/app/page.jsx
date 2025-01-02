@@ -66,7 +66,7 @@ export default function Home() {
               </p>
               <a href="/shop" className="btn" data-aos="zoom-in" data-aos-delay="100" data-aos-duration="600">Shop Now</a>
             </div>
-            <Image data-aos="zoom-in" src={logo} className="home__img" alt="hats" priority />
+            <Image data-aos="zoom-in" src={logo} className="home__img" alt="hats" priority={true} />
           </div>
         </section>
         <Categories categories={categories}/>
