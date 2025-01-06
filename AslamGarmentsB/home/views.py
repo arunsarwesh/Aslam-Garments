@@ -507,11 +507,11 @@ def AddToCart(req):
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
 def Cart(req):
+    user = models.Customer.objects.get(username=req.user.username)
     if req.method == "GET":
         cont = {}
-        user = models.Customer.objects.get(user=req.user)
-        cart = user.cart.all()
-        cont["cart"] = serializers.GetCartSerial(cart, many=True).data
+        cartitem = models.CartItem.objects.filter(user=user)
+        cont["cart"] = serializers.SendCartItemSerializer(cartitem, many=True).data
         return Response(cont)
 
     if req.method == "POST":
@@ -531,12 +531,7 @@ def Cart(req):
         elif req.data["action"] == "d":
             cont["message"] = "Item Deleted"
             cart.delete()
-        cont["cart"] = serializers.GetCartSerial(
-            models.CartItem.objects.filter(
-                customer=models.Customer.objects.get(user=req.user)
-            ),
-            many=True,
-        ).data
+        cont["cart"] = serializers.SendCartItemSerializer(models.CartItem.objects.filter(user=user),many=True,).data
         return Response(cont)
 
 

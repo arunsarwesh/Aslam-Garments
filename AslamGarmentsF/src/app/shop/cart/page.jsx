@@ -15,7 +15,8 @@ import { baseurl } from "@/app/utils/Url";
 export default function CartPage() {
 
   const [token, setToken] = useState();
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([{ id: "", product: { images: [{ id: "", image: "", product: "" }], description: "", selling_price: "" }, quantity: "", size: {} }]);
 
 
   const updateCart = (operation, cartID) => {
@@ -102,23 +103,23 @@ export default function CartPage() {
                       <td>
                         <h3 className="table__title">{product.product.name}</h3>
                         <p className="table__description">
-                          {product.product.discription.length > 60 ?
-                            `${product.product.discription.slice(0, 60)}...` :
-                            product.product.discription}
+                          {product.product.description.length > 60 ?
+                            `${product.product.description.slice(0, 60)}...` :
+                            product.product.description}
                         </p>
                       </td>
                       <td>
                         <span className="table__price">{product.size.size}</span>
                       </td>
                       <td>
-                        <span className="table__price">${product.product.sellingPrice}</span>
+                        <span className="table__price">${product.product.selling_price}</span>
                       </td>
                       <td className="flex-col justify-center">
                         <i className="fi fi-rs-minus-small" onClick={() => { updateCart("r", product.id) }}></i>
                         <span className="qty">{product.quantity}</span>
                         <i className="fi fi-rs-plus-small" onClick={() => { updateCart("a", product.id) }}></i>
                       </td>
-                      <td><span className="subtotal">${product.quantity * product.product.sellingPrice}</span></td>
+                      <td><span className="subtotal">${product.quantity * product.product.selling_price}</span></td>
                       <td><i className="fi fi-rs-trash table__trash" onClick={() => { updateCart("d", product.id) }}></i></td>
                     </tr>
                   ))

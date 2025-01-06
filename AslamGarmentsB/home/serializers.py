@@ -82,17 +82,16 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CartItem
-        fields = ["product", "quantity", "size", "color"]
+        fields = ["product", "quantity", "size",]
 
 
 class SendCartItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
     size = SizeSerializer()
-    color = ColorSerializer()
 
     class Meta:
         model = models.CartItem
-        fields = ["id", "product", "quantity", "size", "color"]
+        fields = ["id", "product", "quantity", "size"]
 
 
 class ShippingAddressSerializer(serializers.ModelSerializer):
@@ -118,7 +117,7 @@ class OrderSerializer(serializers.ModelSerializer):
 class HomeProductSerial(serializers.ModelSerializer):
     class Meta:
         model = models.Product
-        fields = ["id", "name","discription", "sellingPrice","marketPrice", "images","rating","buy_count"]
+        fields = ["id", "name","description", "selling_price","market_price", "images","rating","buy_count"]
     
 class PostReviewSerial(serializers.ModelSerializer):
     product = serializers.CharField()
@@ -142,7 +141,7 @@ class GetCartSerial(serializers.ModelSerializer):
     size = SizeSerializer()
     class Meta:
         model = models.CartItem
-        fields  = ["id",'product','quantity','size','color']
+        fields  = ["id",'product','quantity','size']
 
 class ProfileInfoSerial(serializers.ModelSerializer):
     class Meta:
