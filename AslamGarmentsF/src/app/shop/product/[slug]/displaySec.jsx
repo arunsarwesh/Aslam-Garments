@@ -156,8 +156,8 @@ export default function DisplaySec({ product, variants }) {
                     </div>
                     <div className="details__action">
                         <input type="number" className="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} min={1} max={20} />
-                        <a href="#" onClick={addToCart} className="btn btn--sm">Add To Cart</a>
-                        <a href="#" onClick={buyNow} className="btn btn--sm">Buy Now</a>
+                        <a onClick={addToCart} className="btn btn--sm">Add To Cart</a>
+                        {/* <a href="#" onClick={buyNow} className="btn btn--sm">Buy Now</a> */}
                         <a href="#" className="details__action-btn">
                             <i className="fi fi-rs-heart"></i>
                         </a>

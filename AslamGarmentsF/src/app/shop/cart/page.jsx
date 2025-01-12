@@ -66,31 +66,54 @@ export default function CartPage() {
 
   const buyAllHandler = async () => {
     try {
-      const { data } = await axios.post(`${baseurl}/create_razorpay_order/`, { amount: 100 }, {
-        headers: { Authorization: `Token ${token}` }
+      // Create Razorpay order on the backend
+      const { data } = await axios.post(`${baseurl}/create_razorpay_order/`, {
+        amount: 100, // Amount in paise
+        user: localStorage.getItem("username"),
+      }, {
+        headers: { Authorization: `Token ${token}` },
       });
+  
+      // Configure Razorpay payment options
       const options = {
-        key_id: data.key,
-        amount: data.amount,
+        key: data.key, // Public Key ID from your Razorpay account
+        amount: data.amount, // Amount in paise
         name: "Renz-Trending",
-        description: "Test Transaction",
+        description: "Purchase all items",
         currency: data.currency,
-        order_id: data.order_id,
-        handler: function (response) {
-          console.log(response);
+        order_id: data.order_id, // Order ID generated on the backend
+        handler: async (response) => {
+          // Verifying payment on the backend
+          try {
+            const verification = await axios.post(`${baseurl}/verify_payment/`, { response }, {
+              headers: { Authorization: `Token ${token}` },
+            });
+            
+            console.log("Payment verified successfully", verification.data);
+          } catch (verifyError) {
+            console.error("Payment verification failed", verifyError);
+          }
         },
         prefill: {
           email: "test@example.com",
           contact: "+916380615171",
-          name: "Titan Natesan"
-        }
+          name: "Titan Natesan",
+        },
+        theme: {
+          color: "#4295f5", // Customize Razorpay checkout color
+        },
       };
+  
+      // Open Razorpay checkout
       const rzp = new window.Razorpay(options);
-      rzp.webhooks();
+      rzp.open();
     } catch (error) {
-      console.error(error);
+      console.error("Error in buyAllHandler:", error);
     }
   };
+  
+    
+  
 
   return (
     <>
@@ -170,7 +193,7 @@ export default function CartPage() {
               <i className="fi-rs-shuffle"></i>
               Continue Shopping
             </a>
-            <a href="#" className="btn flex btn__md" onClick={buyAllHandler}>
+            <a className="btn flex btn__md" onClick={buyAllHandler}>
               <i className="fi-rs-shopping-bag"></i>
               Buy All
             </a>

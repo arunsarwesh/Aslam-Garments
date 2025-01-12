@@ -22,7 +22,7 @@ export default function AccountsSection() {
    const [user, setUser] = useState({ username: '', email: '', phone: '', gender: null, first_name: '', last_name: '', type: 'profileinfo' });
    const updateUser = (key, value) => { setUser({ ...user, [key]: value }); }
    const [profilePic, setProfilePic] = useState(`https://robohash.org/${user.username}.jpg?size=200x200&set=set1&bgset=bg2`);
-   const [editablePI, setEditablePI] = useState(true);
+   const [editablePI, setEditablePI] = useState(false);
    const [editableSA, setEditableSA] = useState("");
 
    const GetAddress = () => {
@@ -31,7 +31,10 @@ export default function AccountsSection() {
             console.log(res.data);
             setUser(res.data['ProfileInfo']);
             setAddresses(res.data['ShippingAddresses']);
-            setProfilePic(`${baseurl}${res.data['ProfileInfo'].pic}`);
+            if (res.data['ProfileInfo'].pic) {
+               setProfilePic(`${baseurl}/${res.data['ProfileInfo'].pic}`);
+           }
+           
             setEditablePI(false);
          }).catch((err) => {
             console.log(err);

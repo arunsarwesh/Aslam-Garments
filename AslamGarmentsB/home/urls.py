@@ -13,7 +13,6 @@ urlpatterns = [
     path("getWholeSaleProducts/",views.getWholeSaleProducts,name="Get WholeSale Products",),
     
     
-    
     path("checkAuth/", views.checkAuth, name="checkAuth"),
     path("signup/", views.register, name="register"),
     path("login/", views.CustomAuthToken.as_view(), name="login"),

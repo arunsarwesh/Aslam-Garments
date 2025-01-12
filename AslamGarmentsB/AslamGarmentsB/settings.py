@@ -12,15 +12,14 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv(os.path.join(BASE_DIR, ".env"))
 
-RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID")
-RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET")
+RAZORPAY_KEY_ID= "rzp_test_sq3rDqOF1oDDk2"
+RAZORPAY_SECRET_KEY= "58h8UvmAccuvINCGfxX2YWtZ"
 
 
 MEDIA_URL = "/media/"
@@ -147,8 +146,8 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "AG",
-        "USER": "Titan",
-        "PASSWORD": "titan004",
+        "USER": "postgres",
+        "PASSWORD": "1",
         "HOST": "localhost",
     }
 }
