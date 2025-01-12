@@ -620,3 +620,70 @@ def profile(request):
             return Response({"message": "Address Deleted Successfully"})
         except models.ShippingAddress.DoesNotExist:
             return Response({"error": "Address not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+from django.http import JsonResponse, HttpResponseRedirect
+from django.views.decorators.csrf import csrf_exempt
+import razorpay
+from django.conf import settings
+import json
+
+@csrf_exempt
+def verify_payment(request):
+    if request.method == "POST":
+        try:
+            razorpay_payment_id = request.data.get("razorpay_payment_id")
+            razorpay_order_id = request.data.get("razorpay_order_id")
+            razorpay_signature = request.data.get("razorpay_signature")
+
+            # Initialize Razorpay client with your secret key
+            client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET_KEY))
+
+            # Verify the payment signature
+            params_dict = {
+                'razorpay_order_id': razorpay_order_id,
+                'razorpay_payment_id': razorpay_payment_id,
+                'razorpay_signature': razorpay_signature
+            }
+
+            client.utility.verify_payment_signature(params_dict)
+
+            # If the signature is verified, handle payment success logic here
+            return JsonResponse({"success": True, "message": "Payment verified successfully"})
+
+        except razorpay.errors.SignatureVerificationError:
+            return JsonResponse({"success": False, "message": "Payment verification failed"}, status=400)
+        except Exception as e:
+            return JsonResponse({"success": False, "message": str(e)}, status=400)
+
+    # return JsonResponse({"success": False, "message": "Invalid request method"}, status=400)
+
+@permission_classes([IsAuthenticated])
+@csrf_exempt
+def create_razorpay_order(request):
+    if request.method == "POST":
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+        try:
+            data = json.loads(request.body)
+            amount = data.get("amount")
+            if not amount or not isinstance(amount, (int, float)):
+                return JsonResponse({"error": "Valid amount is required"}, status=400)
+
+            amount_in_paise = int(amount * 100)
+            order = client.order.create({
+                "amount": amount_in_paise,
+                "currency": "INR",
+                "payment_capture": "1",
+            })
+            
+            ic(order)
+            return JsonResponse({
+                "order_id": order["id"],
+                "key": settings.RAZORPAY_KEY_ID,
+                "amount": order["amount"],
+                "currency": order["currency"],
+            })
+        
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return JsonResponse({"error": "Invalid method"}, status=405)

@@ -27,5 +27,7 @@ urlpatterns = [
     path("add2cart/",views.AddToCart,name="Add To Cart"),
     path("cart/",views.Cart,name="Cart"),
     path("profile/", views.profile, name="Profile"),
+    path("verify_payment/",views.verify_payment,name="Verify Payment"),
+    path("create_razorpay_order/",views.create_razorpay_order,name="Create Razorpay Order"),
     # path("fake/",fakedata.add_fake_sizes_for_tops_and_pants,name="Fake Data"),
 ]

@@ -8,10 +8,13 @@ import profile from "../assets/img/user.svg";
 import search from "../assets/img/search.png";
 import burger from "../assets/img/menu-burger.svg";
 import Link from "next/link";
+import { companyInfo } from "../utils/data";
 
 const Navbar = ({ page }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [user, setUser] = useState(null);
+    const { phone } = companyInfo;
+
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
@@ -28,14 +31,14 @@ const Navbar = ({ page }) => {
         { href: "/profile", label: "My Account" },
         { href: "/shop/compare", label: "Compare" },
         { href: "/shop/cart", label: "Cart" },
-    ]; 
+    ];
 
     return (
         <header className="header">
             <div className="header__top">
                 <div className="header__container container">
                     <div className="header__contact">
-                        <span>(+01) - 2345 - 6789</span>
+                        <span>{phone}</span>
                         <span>Our location</span>
                     </div>
                     <p className="header__alert-news">

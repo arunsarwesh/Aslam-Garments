@@ -10,14 +10,21 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { baseurl } from "@/app/utils/Url";
+import Razorpay from "razorpay";
 
 
 export default function CartPage() {
 
   const [token, setToken] = useState();
-  // const [products, setProducts] = useState([]);
   const [products, setProducts] = useState([{ id: "", product: { images: [{ id: "", image: "", product: "" }], description: "", selling_price: "" }, quantity: "", size: {} }]);
-
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      // Load Razorpay script only on client
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      document.body.appendChild(script);
+    }
+  }, []);
 
   const updateCart = (operation, cartID) => {
     toast.promise(
@@ -57,6 +64,34 @@ export default function CartPage() {
     })
   }, [])
 
+  const buyAllHandler = async () => {
+    try {
+      const { data } = await axios.post(`${baseurl}/create_razorpay_order/`, { amount: 100 }, {
+        headers: { Authorization: `Token ${token}` }
+      });
+      const options = {
+        key_id: data.key,
+        amount: data.amount,
+        name: "Renz-Trending",
+        description: "Test Transaction",
+        currency: data.currency,
+        order_id: data.order_id,
+        handler: function (response) {
+          console.log(response);
+        },
+        prefill: {
+          email: "test@example.com",
+          contact: "+916380615171",
+          name: "Titan Natesan"
+        }
+      };
+      const rzp = new window.Razorpay(options);
+      rzp.webhooks();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <Navbar page={"Cart"} />
@@ -94,7 +129,7 @@ export default function CartPage() {
                       <td>
                         <Image
                           src={baseurl + "/" + product.product.images[0].image}
-                          alt={product.product.name}
+                          alt={product.product.name || "product"}
                           className="table__img m-auto"
                           width={100}
                           height={100}
@@ -135,7 +170,7 @@ export default function CartPage() {
               <i className="fi-rs-shuffle"></i>
               Continue Shopping
             </a>
-            <a href="#" className="btn flex btn__md">
+            <a href="#" className="btn flex btn__md" onClick={buyAllHandler}>
               <i className="fi-rs-shopping-bag"></i>
               Buy All
             </a>
@@ -145,7 +180,7 @@ export default function CartPage() {
             <i className="fi fi-rs-fingerprint"></i>
           </div>
 
-          {/* <div className="cart__group grid">
+          <div className="cart__group grid">
             <div className="cart__total">
               <h3 className="section__title">Cart Totals</h3>
               <table className="cart__total-table">
@@ -168,7 +203,7 @@ export default function CartPage() {
                 <i className="fi fi-rs-box-alt"></i> Proceed To Checkout
               </a>
             </div>
-          </div> */}
+          </div>
         </section>
 
         <NewsLetter />

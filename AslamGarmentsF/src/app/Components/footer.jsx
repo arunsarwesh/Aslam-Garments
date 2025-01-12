@@ -7,6 +7,7 @@ import pintrest from "../assets/img/icon-pinterest.svg";
 import youtube from "../assets/img/icon-youtube.svg";
 import payMethod from "../assets/img/payment-method.png";
 import Link from "next/link";
+import { companyInfo } from "../utils/data";
 
 const FootBar = () => {
     const socialLinks = [
@@ -16,6 +17,7 @@ const FootBar = () => {
         { src: pintrest, alt: "Pintrest Logo" },
         { src: youtube, alt: "Youtube Logo" },
     ]
+    const { phone, address, hours } = companyInfo;
     return (
         <footer className="footer container">
             <div className="footer__container grid">
@@ -25,13 +27,13 @@ const FootBar = () => {
                     </a>
                     <h4 className="footer__subtitle">Contact</h4>
                     <p className="footer__description">
-                        <span>Address:</span> 13 Tlemcen Road, Street 32, Beb-Wahren
+                        <span>Address:</span> {address}
                     </p>
                     <p className="footer__description">
-                        <span>Phone:</span> +01 2222 365 /(+91) 01 2345 6789
+                        <span>Phone:</span> {phone}
                     </p>
                     <p className="footer__description">
-                        <span>Hours:</span> 10:00 - 18:00, Mon - Sat
+                        <span>Hours:</span> {hours}
                     </p>
                     <div className="footer__social">
                         <h4 className="footer__subtitle">Follow Me</h4>
